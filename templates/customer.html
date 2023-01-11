@@ -1,0 +1,20 @@
+{% extends "base_template_3.html" %}
+
+{% block title %}
+<h2>Customer {{customer.Surname}}, {{customer.GivenName }}</h2>
+{% endblock %}
+
+{% block content %}
+    <h1>
+        {{customer.Surname}}, {{customer.GivenName}}
+    </h1>
+    <p>Customer lives in {{ customer.City }}</p>
+    <!-- account_list -->
+    <!-- account 1-->
+    <!-- account 2 -->
+    <!-- account 3 -->
+    <!-- etc. -->
+
+    <!-- if premium_customer etc -->
+    
+{% endblock %}    

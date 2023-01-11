@@ -1,0 +1,68 @@
+{% extends "base_template_3.html" %}
+
+{% block title %}
+<h1>Startsida</h1>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-4 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h5>Customers</h5>
+        <div class="row">
+          <div class="col-8 col-sm-12 col-xl-8 my-auto">
+            <div class="d-flex d-sm-block d-md-flex align-items-center">
+              <h2 class="mb-0">{{total_customers}}</h2>
+            </div>
+          </div>
+          <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+            <img src="../static/template/assets/images/index_images/img_customers.png">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h5>Accounts</h5>
+        <div class="row">
+          <div class="col-8 col-sm-12 col-xl-8 my-auto">
+            <div class="d-flex d-sm-block d-md-flex align-items-center">
+              <h2 class="mb-0">{{total_accounts}}</h2>
+            </div>
+          </div>
+          <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+            <img src="../static/template/assets/images/index_images/img_accounts.png">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h5>Transactions</h5>
+        <div class="row">
+          <div class="col-8 col-sm-12 col-xl-8 my-auto">
+            <div class="d-flex d-sm-block d-md-flex align-items-center">
+              <h2 class="mb-0">{{total_transactions}}</h2>
+            </div>
+          </div>
+          <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+            <img src="../static/template/assets/images/index_images/img_transactions.png">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+{% endblock %}    
