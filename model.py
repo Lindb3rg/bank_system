@@ -58,7 +58,7 @@ def seedData(db):
 
         customer.Streetaddress = barnum.create_street()
         customer.Zipcode, customer.City, _  = barnum.create_city_state_zip()
-        customer.Country = "USA"
+        customer.Country = barnum.create_c
         customer.CountryCode = "US"
         customer.Birthday = barnum.create_birthday()
         n = barnum.create_cc_number()
