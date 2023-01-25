@@ -1,14 +1,14 @@
 {% extends "base_template_3.html" %}
 
 {% block title %}
-
+Customers
 {% endblock %}
 
 
 
 {% block content %}
     
-<h6>Visar sidan {{ page }} av totalt {{ pages }}</h6>
+<h6 class="text-muted">Page {{ page }} of total {{ pages }}</h6>
 
 <nav class="navbar p-0 fixed-top d-flex flex-row">
     
@@ -17,7 +17,7 @@
         <li class="nav-item w-100">
             <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" method="get">
                 <input type="text" class="form-control" placeholder="Search customer" value="{{ q }}" name="q">
-                <input class="nav-link btn btn-success create-new-button" type=submit value="Sök">
+                <input class="nav-link btn" type=submit value="Search">
             </form>
         </li>
       </ul>
@@ -30,24 +30,30 @@
 
 <table class="table">
     <thead>
-        <th>
-            Namn
+
+        <th class="text-muted">
+            
+            <h4>Name</h4>
             <a href="/customers?sortColumn=namn&sortOrder=asc&q={{ q }}">
-                <i class='bx bx-up-arrow-alt'></i>
+                <span class="text-muted"><i class='mdi mdi-arrow-up-bold'></i></span>
             </a>
             <a href="/customers?sortColumn=namn&sortOrder=desc&q={{ q }}">
-                <i class='bx bx-down-arrow-alt'></i>
+                <span class="text-muted"><i class='mdi mdi-arrow-down-bold'></i></span>
             </a>
+            
         </th>
-        <th>
-                City
+        <th class="text-muted">
+            <h4>City</h4>
                 <a href="/customers?sortColumn=city&sortOrder=asc&q={{ q }}">
-                    <i class='bx bx-up-arrow-alt'></i>
+                    <span class="text-muted"><i class='mdi mdi-arrow-up-bold'></i></span>
                 </a>
                 <a href="/customers?sortColumn=city&sortOrder=desc&q={{ q }}">
-                    <i class='bx bx-down-arrow-alt'></i>
+                    <span class="text-muted"><i class='mdi mdi-arrow-down-bold'></i></span>
                 </a>
-            </th>
+            
+
+        </th>
+
         <th></th>
 
     </thead>
@@ -57,7 +63,7 @@
             <td>{{ p.GivenName }}, {{p.Surname }}</td>            
             <td>{{ p.City }}</td>        
             <td>
-                <a href="/customer/{{ p.Id }}" class="btn">Se mer</a>
+                <a href="/customer/{{ p.Id }}" class="btn btn-inverse-info">Visit</a>
             </td>
                     
         </tr>
@@ -69,7 +75,7 @@
                   <td>
                     {% if has_prev %}
                     <a class="btn" href="/customers?page={{ page - 1 }}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">
-                        <h4>Prev</h4>
+                        <h4 class="text-muted">Prev</h4>
                     </a>
                     {% endif %}
                   </td>
@@ -77,7 +83,7 @@
                   <td>
                     {% if has_next %}
                     <a class="btn" href="/customers?page={{ page + 1 }}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">
-                        <h4>Next</h4>
+                        <h4 class="text-muted">Next</h4>
                     </a>
                     {% endif %}
                   </td>

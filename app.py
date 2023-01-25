@@ -17,11 +17,16 @@ migrate = Migrate(app,db)
 
 
 @app.route("/")
+def login_page():
+    return render_template("login.html")
+
+
+@app.route("/startpage")
 def startpage():
     total_customers = len(Customer.query.all())
     total_accounts = len(Account.query.all())
     total_balance = Account.query.with_entities(func.sum(Account.Balance).label('total')).first().total
-    return render_template("index.html", total_customers=total_customers,total_accounts=total_accounts,total_balance=total_balance)
+    return render_template("start_page.html", total_customers=total_customers,total_accounts=total_accounts,total_balance=total_balance)
 
 
 @app.route("/customers")
