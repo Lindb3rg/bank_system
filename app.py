@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, upgrade
 from model import Customer,Account,Transaction
 from sqlalchemy import func
+from flask_security import roles_accepted, auth_required, logout_user
 
 from model import db, seedData
 
@@ -74,17 +75,13 @@ def customerspage():
                     q = searchWord)
 
 
-
-# @app.route("/customers")
-# def customers():
-#     customers = Customer.query.all()
-#     return render_template("customers.html", customers=customers)
-
-
 @app.route("/customer/<id>")
 def customer_page(id):
     customer = Customer.query.filter_by(Id=id).first()
-    return render_template("customer.html", customer=customer)
+    accounts = Account.query.filter_by(CustomerId=id)
+
+
+    return render_template("customer.html", customer=customer, accounts=accounts)
 
 
 if __name__  == "__main__":
@@ -93,5 +90,5 @@ if __name__  == "__main__":
 
 
         seedData(db)
-        app.run()
+        app.run(debug=True)
 
