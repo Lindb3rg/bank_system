@@ -36,7 +36,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
           <div class="text-center">
-          <h3 class="text-muted">BANK OF TERMINUS</h3>
+          <h3 class="text-muted">THE BANK.se</h3>
           </div>
           <!-- <a class="sidebar-brand brand-logo" href="/startpage"><img src="../static/template/assets/images/terminus.svg" alt="logo" /></a> -->
           <!-- <a class="sidebar-brand brand-logo-mini" href="/startpage"><img src="static/template/assets/images/terminus_small.svg" alt="logo" /></a> -->
@@ -47,7 +47,7 @@
           </li>
           <!-- ######### navigation links starts here ######### -->
           <li class="nav-item menu-items">
-            <a class="nav-link" href="/startpage">
+            <a class="nav-link" href="/">
               <span class="menu-icon">
                 <i class="mdi mdi-bank"></i>
               </span>
@@ -85,8 +85,15 @@
               <li class="nav-item dropdown">
                 <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                   <div class="navbar-profile">
-                    <img class="img-xs rounded-circle" src="static/template/assets/images/faces/face15.jpg" alt="">
-                    <p class="mb-0 d-none d-sm-block navbar-profile-name">Henry Klein</p>
+                    <h4 class="text-muted">
+                    {% if current_user.is_authenticated %}
+                    {{current_user.email}}
+                    {%endif%}
+                    </h4>
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">
+                    
+
+                    </p>
                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                   </div>
                 </a>
@@ -103,8 +110,9 @@
                       <p class="preview-subject mb-1">Settings</p>
                     </div>
                   </a>
+                  {% if current_user.is_authenticated %}
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item" href="/">
+                  <a class="dropdown-item preview-item" href="/logout">
                     <div class="preview-thumbnail">
                       <div class="preview-icon bg-dark rounded-circle">
                         <i class="mdi mdi-logout text-danger"></i>
@@ -114,6 +122,7 @@
                       <p class="preview-subject mb-1">Log out</p>
                     </div>
                   </a>
+                  {%endif%}
                   
               </li>
             </ul>
@@ -124,7 +133,7 @@
         </nav>
         <!-- partial -->
         <div class="main-panel">
-          <div class="content-wrapper">
+          <div class="content-wrapper m-0">
             {% block content %}
 
 
@@ -144,7 +153,10 @@
           <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
               <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">All Rights Reseved © bankofterminus.com</span>
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Having issues with the site? Click here</span>
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Having issues with the site? 
+                <a href="/issue-report">Click here</a>
+
+              </span>
               
             </div>
           </footer>

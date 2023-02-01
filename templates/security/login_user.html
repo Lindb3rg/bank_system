@@ -1,0 +1,117 @@
+{% extends "login_template.html" %}
+{% from "security/_macros.html" import render_field_with_errors, render_field, render_field_errors, render_form_errors, prop_next %}
+
+{% block content %}
+<!-- {% include "security/_messages.html" %} -->
+
+<div class="row w-100 m-0 align">
+
+    <div class="card col-lg-4 mx-auto align-items-center">
+      <div class="card-body px-5 py-5">
+        <h1 class="card-title text-left mb-3 text-muted">{{ _fsdomain('Login') }}</h1>
+
+    
+      <form action="{{ url_for_security('login') }}{{ prop_next() }}" method="POST" name="login_user_form">
+        {{ login_user_form.hidden_tag() }}
+        {{ render_form_errors(login_user_form) }}
+
+        {% if "email" in identity_attributes %}
+          {{ render_field_with_errors(login_user_form.email, class="form-control p_input") }}
+        {% endif %}
+
+        {% if login_user_form.username and "username" in identity_attributes %}
+          {% if "email" in identity_attributes %}
+            <h3>{{ _fsdomain("or") }}</h3>
+          {% endif %}
+          {{ render_field_with_errors(login_user_form.username) }}
+        {% endif %}
+        <div class="fs-gap">
+          {{ render_field_with_errors(login_user_form.password, class="form-control p_input") }}</div>
+        {{ render_field_with_errors(login_user_form.remember) }}
+        {{ render_field_errors(login_user_form.csrf_token) }}
+        
+        
+        {{ render_field(login_user_form.submit, class="btn btn-primary btn-block enter-btn") }}
+      </form>
+    
+
+    {% if security.webauthn %}
+      <hr class="fs-gap">
+      <h2>{{ _fsdomain("Use WebAuthn to Sign In") }}</h2>
+      <div>
+        <form method="GET" id="wan-signin-form" name="wan_signin_form">
+
+            <input id="wan_signin" name="wan_signin" type="submit" value="{{ _fsdomain('Sign in with WebAuthn') }}"
+              formaction="{{ url_for_security('wan_signin') }}{{ prop_next() }}">
+
+        </form>
+      </div>
+    {% endif %}
+
+    {% if security.oauthglue %}
+      <hr class="fs-gap">
+      <h2>{{ _fsdomain("Use Social Oauth to Sign In") }}</h2>
+      {% for provider in security.oauthglue.provider_names %}
+        <div class="fs-gap">
+          <form method="POST" id={{ provider }}-form name={{ provider }}_form>
+            <input id={{ provider }} name={{ provider }} type="submit" value="{{ _fsdomain('Sign in with ')~provider }}"
+              formaction="{{ url_for_security('oauthstart', name=provider) }}{{ prop_next() }}">
+          </form>
+        </div>
+
+
+
+    {% endfor %}
+  {% endif %}
+
+
+
+
+      </div>
+    </div>
+
+</div>
+      
+
+
+{% include "security/_menu.html" %}
+{% endblock %}
+
+
+<div class="row w-100 m-0">
+  <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+    <div class="card col-lg-4 mx-auto">
+      <div class="card-body px-5 py-5">
+        <h3 class="card-title text-left mb-3">Login</h3>
+        <form>
+          <div class="form-group">
+            <label>Username or email *</label>
+            <input type="text" class="form-control p_input">
+          </div>
+          <div class="form-group">
+            <label>Password *</label>
+            <input type="text" class="form-control p_input">
+          </div>
+          <div class="form-group d-flex align-items-center justify-content-between">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="checkbox" class="form-check-input"> Remember me <i class="input-helper"></i></label>
+            </div>
+            <a href="#" class="forgot-pass">Forgot password</a>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-block enter-btn">Login</button>
+          </div>
+          <div class="d-flex">
+            <button class="btn btn-facebook mr-2 col">
+              <i class="mdi mdi-facebook"></i> Facebook </button>
+            <button class="btn btn-google col">
+              <i class="mdi mdi-google-plus"></i> Google plus </button>
+          </div>
+          <p class="sign-up">Don't have an Account?<a href="#"> Sign Up</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- content-wrapper ends -->
+</div>

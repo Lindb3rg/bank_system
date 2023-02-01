@@ -25,12 +25,10 @@ migrate = Migrate(app,db)
 
 
 
+
 @app.route("/")
-def login_page():
-    return render_template("login.html")
-
-
-@app.route("/startpage")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def startpage():
     total_customers = len(Customer.query.all())
     total_accounts = len(Account.query.all())
@@ -38,10 +36,23 @@ def startpage():
     return render_template("start_page.html", total_customers=total_customers,total_accounts=total_accounts,total_balance=total_balance)
 
 
+
+
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect("/startpage")
+    return redirect("/")
+
+@app.route("/report-form", methods = ["GET","POST"])
+def report_issue():
+    form = report_form()
+    if form.validate_on_submit():
+        return redirect("/report-confirmation?FirstName=" + form.fname.data)
+
+    return render_template("/issue_report.html", form=form)
+
+
+
 
 
 @app.route("/customers")

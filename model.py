@@ -79,16 +79,31 @@ def seedData(app,db):
         app.security.datastore.create_role(name="Cashier")
 
     if not app.security.datastore.find_user(email="stefan.holmberg@systementor.se"):
-        app.security.datastore.create_user(email="stefan.holmberg@systementor.se", password=hash_password("Hejsan123#"),roles=["Admin","Cashier"])
+        app.security.datastore.create_user(email="stefan.holmberg@systementor.se", password=hash_password("Hejsan123#"),roles=["Admin"])
+
+    if not app.security.datastore.find_user(email="stefan.holmberg@nackademin.se"):
+        app.security.datastore.create_user(email="stefan.holmberg@nackademin.se", password=hash_password("Hejsan123#"),roles=["Cashier"])
     
-    if not app.security.datastore.find_user(email="adam.lindberg@thebank.se"):
-        app.security.datastore.create_user(email="adam.lindberg@thebank.se", password=hash_password("Hejsan123#"),roles=["Admin","Cashier"])
+    if not app.security.datastore.find_user(email="admin@thebank.se"):
+        app.security.datastore.create_user(email="admin@thebank.se", password=hash_password("Hejsan123#"),roles=["Admin","Cashier"])
 
     if not app.security.datastore.find_user(email="cashier1@thebank.se"):
-        app.security.datastore.create_user(email="cashier1@thebank.se", password=hash_password("Hejsan123#"),roles=["Staff"])
+        app.security.datastore.create_user(email="cashier1@thebank.se", password=hash_password("Hejsan123#"),roles=["Cashier"])
+    
+    if not app.security.datastore.find_user(email="admin1@thebank.se"):
+        app.security.datastore.create_user(email="admin1@thebank.se", password=hash_password("Hejsan123#"),roles=["Admin"])
+    
+    if not app.security.datastore.find_user(email="admin2@thebank.se"):
+        app.security.datastore.create_user(email="admin2@thebank.se", password=hash_password("Hejsan123#"),roles=["Admin"])
+    
+    if not app.security.datastore.find_user(email="holmberg@systementor.se"):
+        app.security.datastore.create_user(email="holmberg@systementor.se", password=hash_password("Hejsan123#"),roles=["Admin"])
+    
+    if not app.security.datastore.find_user(email="admin@halloj.se"):
+        app.security.datastore.create_user(email="admin@halloj.se", password=hash_password("Hejsan123#"),roles=["Admin"])
+    
 
-    if not app.security.datastore.find_user(email="cashier2@thebank.se"):
-        app.security.datastore.create_user(email="cashier2@thebank.se", password=hash_password("Hejsan123#"),roles=["Staff"])
+    
 
     app.security.datastore.db.session.commit()
 
