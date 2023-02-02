@@ -6,11 +6,13 @@ from sqlalchemy import func
 from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData
+from forms import Issue_report_form
 
 
 
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = os.urandom(32)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:my-secret-pw@localhost/Bank'
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", 'pf9Wkove4IKEAXvy-cQkeDPhv9Cb3Ag-123asdasfasdf')
 app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT", '851453681323861735056780167285096341234')
@@ -43,15 +45,23 @@ def logout():
     logout_user()
     return redirect("/")
 
+
+
+
 @app.route("/report-form", methods = ["GET","POST"])
 def report_issue():
-    form = report_form()
+    form = Issue_report_form()
     if form.validate_on_submit():
-        return redirect("/report-confirmation?FirstName=" + form.fname.data)
+        return redirect("/report-confirmation?name=" + form.name.data)
 
     return render_template("/issue_report.html", form=form)
 
 
+@app.route("/report-confirmation")
+def report_confirmation():
+    user_name = request.args.get("name", " ")
+    return render_template("/report_confirmation.html", name=user_name)
+    
 
 
 
