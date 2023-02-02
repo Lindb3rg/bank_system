@@ -7,6 +7,7 @@ from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData
 from forms import Issue_report_form
+import datetime
 
 
 
@@ -24,7 +25,6 @@ db.app = app
 db.init_app(app)
 migrate = Migrate(app,db)
  
-
 
 
 
@@ -52,6 +52,10 @@ def logout():
 def report_issue():
     form = Issue_report_form()
     if form.validate_on_submit():
+        # todays_date = datetime.now()
+        # time_date = todays_date.strftime("%Y-%m-%d %H:%M:%S")
+        
+
         return redirect("/report-confirmation?name=" + form.name.data)
 
     return render_template("/issue_report.html", form=form)

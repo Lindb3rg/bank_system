@@ -15,20 +15,20 @@
         {{ form.csrf_token }}
         
         <div class="form-group">
-          <label for="exampleInputEmail3">Name</label>
-          {{ render_field(form.name) }}
+          <label="Name">Name</label>
+          {{ render_field(form.name, autocomplete="off") }}
         </div>  
         <div class="form-group">
-          <label for="exampleInputEmail3">Email</label>
-          {{ render_field(form.email) }}
+          <label>Email</label>
+          {{ render_field(form.email, autocomplete="off") }}
         </div>  
         <div class="form-group">
-          <label for="exampleInputEmail3">User ID</label>
+          <label>User ID</label>
           {{ render_field(form.userid) }}
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail3">Please describe the issue</label>
-          {{ render_field(form.textfield) }}
+          <label>Please describe the issue</label>
+          {{ render_field(form.textfield, rows=5,cols=50, autocomplete="off") }}
         </div>
        
       
