@@ -15,7 +15,7 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
             
             <div class="table-responsive">
             
-                <table class="table table-hover">
+                <table class="table">
                     <thead>
                         
                     <tr>
@@ -37,7 +37,7 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
                             <td><h4>{{account.Id}}</h4></td>
                             <td><h4>{{account.AccountType}}</h4></td>
                             <td>
-                                <a href="/customer/{{ account.Id }}" class="badge badge-success">Open</a>
+                                <a href="/account/{{ account.Id }}" class="badge badge-success">Open</a>
                             </td>
                         </tr>{%endfor%}
                     

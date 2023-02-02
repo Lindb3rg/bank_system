@@ -122,6 +122,18 @@ def customer_page(id):
 
     return render_template("customer.html", customer=customer, accounts=accounts)
 
+@app.route("/account/<id>")
+def account_page(id):
+    id = int(id)
+    transactions = Transaction.query.filter_by(AccountId=id)
+    return render_template("account.html", transactions = transactions)
+
+
+
+
+
+
+
 
 if __name__  == "__main__":
     with app.app_context():

@@ -1,0 +1,60 @@
+{% extends "base_template_3.html" %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="col-lg-12 grid-margin stretch-card">
+    
+    <div class="card">
+        
+        <div class="card-body">
+            <h4>Account no. {{transactions.accountId}}</h4>
+            
+            <div class="table-responsive">
+            
+                <table class="table">
+                    <thead>
+                        
+                    <tr>
+
+
+                        <th>Transaction ID</th>
+                        <th>Type</th>
+                        <th>Operation</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>New Balance</th>
+
+                    </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {%  for transaction in transactions  %}
+                       
+                        <tr>
+
+                            <td>{{transactions.Id}}</td>
+                            <td>{{transactions.Type}}</td>
+                            <td>{{transactions.Operation}}</td>
+                            <td>{{transactions.Date}}</td>
+                            <td>{{transactions.Amount}}</td>
+                            <td>{{transactions.NewBalance}}</td>
+                            
+
+                                
+
+                        </tr>{%endfor%}
+                    
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    
+
+</div>
+{% endblock %}    
