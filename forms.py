@@ -12,6 +12,14 @@ class Issue_report_form(FlaskForm):
     p1 = BooleanField("p1")
     p2 = BooleanField("p2")
     p3 = BooleanField("p3")
+
+
+
+class Deposition_form(FlaskForm):
+    deposition = IntegerField('deposit', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
+    confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
+    
+    
     
 
     

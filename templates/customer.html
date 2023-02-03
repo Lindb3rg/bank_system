@@ -21,9 +21,9 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
                     <tr>
 
 
-                        <th><h4>Balance</h4></th>
-                        <th><h4>Account ID</h4></th>
-                        <th><h4>Account Type</h4></th>
+                        <th>Balance</th>
+                        <th>Account ID</th>
+                        <th>Account Type</th>
 
                     </tr>
                     </thead>
@@ -33,13 +33,23 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
                        
                         <tr>
 
-                            <td><h4>{{account.Balance}}</h4></td>
-                            <td><h4>{{account.Id}}</h4></td>
-                            <td><h4>{{account.AccountType}}</h4></td>
+                            <td>{{account.Balance}}</td>
+                            <td>{{account.Id}}</td>
+                            <td>{{account.AccountType}}</td>
                             <td>
-                                <a href="/account/{{ account.Id }}" class="badge badge-success">Open</a>
+                                <a href="/account/{{customer.Id}}/{{ account.Id }}" class="btn btn-rounded btn-primary btn-sm">Open</a>
+                            </td>
+                            <td>
+                                <a href="/deposit" class="btn btn-rounded btn-success btn-sm">Deposit</a>
+                            </td>
+                            <td>
+                                <a href="/account/{{customer.Id}}/{{ account.Id }}" class="btn btn-rounded btn-warning btn-sm">Withdrawal</a>
+                            </td>
+                            <td>
+                                <a href="/account/{{customer.Id}}/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm">Transfer</a>
                             </td>
                         </tr>{%endfor%}
+                        
                     
                     </tbody>
                 </table>
@@ -60,53 +70,60 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
                 <table class="table table">
                     <tbody>
                         <tr>
-                            <td><h4>User ID: </h4></td>
-                            <td><h4>{{customer.Id}}</h4></td>
+                            <td>User ID: </td>
+                            <td>{{customer.Id}}</td>
                         </tr>
                         <tr>
-                        <td><h4>Name: </h4></td>
-                        <td><h4>{{customer.GivenName}} {{customer.Surname}}</h4></td>
+                        <td>Name: </td>
+                        <td>{{customer.GivenName}} {{customer.Surname}}</td>
                         </tr>
                         <tr>
-                            <td><h4>Street Address: </h4></td>
-                            <td><h4>{{customer.Streetaddress}}</h4></td>
+                            <td>Street Address: </td>
+                            <td>{{customer.Streetaddress}}</td>
                         </tr>
                         <tr>
-                            <td><h4>City: </h4></td>
-                            <td><h4>{{customer.City}}</h4></td>
+                            <td>City: </td>
+                            <td>{{customer.City}}</td>
                         </tr>
                         <tr>
-                            <td><h4>Zipcode: </h4></td>
-                            <td><h4>{{customer.Zipcode}}</h4></td>
+                            <td>Zipcode: </td>
+                            <td>{{customer.Zipcode}}</td>
                         </tr>
                         <tr>
-                            <td><h4>Country: </h4></td>
-                            <td><h4>{{customer.Country}}</h4></td>
+                            <td>Country: </td>
+                            <td>{{customer.Country}}</td>
                         </tr>
                         <tr>
-                            <td><h4>Country Code: </h4></td>
-                            <td><h4>{{customer.CountryCode}}</h4></td>
+                            <td>Country Code: </td>
+                            <td>{{customer.CountryCode}}</td>
                         </tr>
                         <tr>
-                            <td><h4>Telephone: </h4></td>
-                            <td><h4>{{customer.Telephone}}</h4></td>
+                            <td>Telephone: </td>
+                            <td>{{customer.Telephone}}</td>
                         </tr>
                         <tr>
-                            <td><h4>Birthday: </h4></td>
-                            <td><h4>{{customer.Birthday}}</h4></td>
+                            <td>Birthday: </td>
+                            <td>{{customer.Birthday}}</td>
                         </tr>
                         <tr>
-                            <td><h4>National ID: </h4></td>
-                            <td><h4>{{customer.NationalId}}</h4></td>
+                            <td>National ID: </td>
+                            <td>{{customer.NationalId}}</td>
                         </tr>
                         <tr>
-                            <td><h4>Telephone Country Code: </h4></td>
-                            <td><h4>{{customer.TelephoneCountryCode}}</h4></td>
+                            <td>Telephone Country Code: </td>
+                            <td>{{customer.TelephoneCountryCode}}</td>
                         </tr>
                         <tr>
-                            <td><h4>E-mail Address: </h4></td>
-                            <td><h4>{{customer.EmailAddress}}</h4></td>
+                            <td>E-mail Address: </td>
+                            <td>{{customer.EmailAddress}}</td>
                         </tr>
+                        <tr>
+                            <td>
+                                <a href="/customers" class="btn btn-rounded btn-primary btn-sm">Back</a>
+                            </td>
+                        </tr>
+
+
                         
                         
                     </tbody>

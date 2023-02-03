@@ -11,7 +11,7 @@
     <div class="card">
         
         <div class="card-body">
-            <h4>Account no. {{transactions.accountId}}</h4>
+            <h4>Account no. {{id}}</h4>
             
             <div class="table-responsive">
             
@@ -32,21 +32,27 @@
                     </thead>
                     
                     <tbody>
-                        {%  for transaction in transactions  %}
+                        {%  for transaction in current_transactions  %}
                        
                         <tr>
 
-                            <td>{{transactions.Id}}</td>
-                            <td>{{transactions.Type}}</td>
-                            <td>{{transactions.Operation}}</td>
-                            <td>{{transactions.Date}}</td>
-                            <td>{{transactions.Amount}}</td>
-                            <td>{{transactions.NewBalance}}</td>
+                            <td>{{transaction.Id}}</td>
+                            <td>{{transaction.Type}}</td>
+                            <td>{{transaction.Operation}}</td>
+                            <td>{{transaction.Date}}</td>
+                            <td>{{transaction.Amount}}</td>
+                            <td>{{transaction.NewBalance}}</td>
                             
 
                                 
 
                         </tr>{%endfor%}
+
+                        <tr>
+                            <td>
+                                <a href="/customer/{{ customer }}" class="btn btn-rounded btn-primary btn-sm">Back</a>
+                            </td>
+                        </tr>
                     
                     </tbody>
                 </table>

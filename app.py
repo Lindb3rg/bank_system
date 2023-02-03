@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData
-from forms import Issue_report_form
+from forms import Issue_report_form,Deposition_form
 import datetime
 
 
@@ -48,23 +48,7 @@ def logout():
 
 
 
-@app.route("/report-form", methods = ["GET","POST"])
-def report_issue():
-    form = Issue_report_form()
-    if form.validate_on_submit():
-        # todays_date = datetime.now()
-        # time_date = todays_date.strftime("%Y-%m-%d %H:%M:%S")
-        
 
-        return redirect("/report-confirmation?name=" + form.name.data)
-
-    return render_template("/issue_report.html", form=form)
-
-
-@app.route("/report-confirmation")
-def report_confirmation():
-    user_name = request.args.get("name", " ")
-    return render_template("/report_confirmation.html", name=user_name)
     
 
 
@@ -118,18 +102,65 @@ def customerspage():
 def customer_page(id):
     customer = Customer.query.filter_by(Id=id).first()
     accounts = Account.query.filter_by(CustomerId=id)
+    
 
 
     return render_template("customer.html", customer=customer, accounts=accounts)
 
-@app.route("/account/<id>")
-def account_page(id):
+
+@app.route("/account/<customer>/<id>")
+def account_page(customer,id):
     id = int(id)
-    transactions = Transaction.query.filter_by(AccountId=id)
-    return render_template("account.html", transactions = transactions)
+    customer = customer
+    account = Account.query.filter_by(Id=id)
+    current_transactions = Transaction.query.filter_by(AccountId=id)
+    
+    
+
+    return render_template("account.html", id=id, customer = customer, account=account, current_transactions=current_transactions)
 
 
 
+
+
+@app.route("/deposit", methods = ["GET","POST"])
+def deposit():
+    new_deposit = Deposition_form()
+    if new_deposit.validate_on_submit():
+        view_deposition = str(new_deposit.deposition.data)
+        return redirect("/deposition-confirmation?=" + view_deposition)
+    # id = int(id)
+    # customer = customer
+    # account = Account.query.filter_by(Id=id)
+    # current_transactions = Transaction.query.filter_by(AccountId=id)
+
+    return render_template("deposit.html", new_deposit=new_deposit)
+
+@app.route("/deposition-confirmation")
+def deposition_confirmation():
+    amount = request.args.get("deposition", " ")
+    return render_template("/deposition_confirmation.html", deposition=amount)
+
+
+
+
+@app.route("/report-form", methods = ["GET","POST"])
+def report_issue():
+    form = Issue_report_form()
+    if form.validate_on_submit():
+        # todays_date = datetime.now()
+        # time_date = todays_date.strftime("%Y-%m-%d %H:%M:%S")
+        
+
+        return redirect("/report-confirmation?name=" + form.name.data)
+
+    return render_template("/issue_report.html", form=form)
+
+
+@app.route("/report-confirmation")
+def report_confirmation():
+    # user_name = request.args.get("name", " ")
+    return render_template("/report_confirmation.html")
 
 
 
