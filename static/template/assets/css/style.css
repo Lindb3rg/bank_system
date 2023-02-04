@@ -20195,7 +20195,7 @@ div.tagsinput {
 /* === Landing screens === */
 /* Auth */
 .auth.login-bg {
-  background: url("../images/auth/Login_bg.jpg");
+  background: url("../images/auth/pexels.jpg");
   background-size: cover; }
 
 .auth .login-half-bg {
@@ -20558,6 +20558,9 @@ div.tagsinput {
           width: 32px;
           height: 32px;
           border-radius: 100%; }
+
+        
+
         .navbar .navbar-menu-wrapper .navbar-nav .nav-item.nav-profile .nav-link .nav-profile-img .availability-status {
           position: absolute;
           width: 10px;
@@ -21133,3 +21136,7 @@ div.tagsinput {
   flex-grow: 1; }
 
 /*# sourceMappingURL=maps/style.css.map */
+
+.slight_radius {
+  border-radius: 80%;
+}

@@ -18,6 +18,10 @@ class Issue_report_form(FlaskForm):
 class Deposition_form(FlaskForm):
     deposition = IntegerField('deposit', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
+
+class Withdrawal_form(FlaskForm):
+    withdrawal = IntegerField('withdrawal', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
+    confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
     
     
     

@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData
-from forms import Issue_report_form,Deposition_form
+from forms import Issue_report_form,Deposition_form, Withdrawal_form
 import datetime
 
 
@@ -140,6 +140,28 @@ def deposit():
 def deposition_confirmation():
     amount = request.args.get("deposition", " ")
     return render_template("/deposition_confirmation.html", deposition=amount)
+
+
+
+
+@app.route("/withdraw", methods = ["GET","POST"])
+def withdraw():
+    new_withdrawal = Withdrawal_form()
+    if new_withdrawal.validate_on_submit():
+
+        return redirect("/withdrawal-confirmation")
+    # id = int(id)
+    # customer = customer
+    # account = Account.query.filter_by(Id=id)
+    # current_transactions = Transaction.query.filter_by(AccountId=id)
+
+    return render_template("withdraw.html", new_withdrawal=new_withdrawal)
+
+
+@app.route("/withdrawal-confirmation")
+def withdrawal_confirmation():
+    # amount = request.args.get("deposition", " ")
+    return render_template("/withdrawal_confirmation.html")
 
 
 

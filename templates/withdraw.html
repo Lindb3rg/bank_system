@@ -10,22 +10,22 @@
   <div class="card">
     <div class="card-body">
       <div class="list-wrapper">
-        <h4 class="card-title">DEPOSITION</h4>
+        <h4 class="card-title">WITHDRAWAL</h4>
 
         
         <form class="forms-sample" method="post">
-          {{ new_deposit.csrf_token }}
+          {{ new_withdrawal.csrf_token }}
           
           <label class="form-check text-muted">Amount</label>
           <div class="form-check form-check-primary">
             
-            {{ render_field(new_deposit.deposition, autocomplete="off") }}
+            {{ render_field(new_withdrawal.withdrawal, autocomplete="off") }}
           </div>  
           
 
           <label class="form-check text-danger">Confirm the amount is correct</label>
           <div class="form-check form-check-primary">
-            {{ render_field(new_deposit.confirmation, class="checkbox")  }}
+            {{ render_field(new_withdrawal.confirmation, class="checkbox")  }}
           </div>
 
           
@@ -33,7 +33,7 @@
         
           
         <div class="form-check form-check-primary">
-          <button type="submit" class="btn btn-rounded btn-success btn-md">Make Deposit</button>
+          <button type="submit" class="btn btn-rounded btn-warning btn-md">Make Withdrawal</button>
         </div>
         </form>
 
