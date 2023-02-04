@@ -1,8 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import Form,BooleanField,StringField,PasswordField,validators,ValidationError
-from wtforms.fields import IntegerField, TextAreaField, EmailField
+from wtforms.fields import IntegerField, TextAreaField, EmailField, FieldList, FormField, SelectField
 
-
+def Check_duplicate_account(account_from,account_to):
+    if account_from == account_to:
+        raise ValidationError("Cannot use the same account")
 
 class Issue_report_form(FlaskForm):
     name = StringField('name', validators=[validators.DataRequired()])
@@ -22,9 +24,18 @@ class Deposition_form(FlaskForm):
 class Withdrawal_form(FlaskForm):
     withdrawal = IntegerField('withdrawal', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
+
+
+
+
+class Transfer_form(FlaskForm):
+    accounts_from = SelectField("accounts_from", choices=[],validators=[validators.DataRequired()])
+    accounts_to = SelectField("accounts_to", choices=[],validators=[validators.DataRequired()])
+    amount = IntegerField("amount",validators=[validators.DataRequired()])
+    confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
     
-    
-    
+
+
 
     
     

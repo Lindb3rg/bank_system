@@ -1,0 +1,62 @@
+{% from "_form_helpers.html" import render_field %}
+{% extends "base_template_3.html"%}
+
+
+{% block content %}
+
+
+
+<div class="col-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <div class="list-wrapper">
+        <h4 class="card-title">TRANSFER</h4>
+
+        
+        <form class="forms-sample" method="post">
+          {{ new_transfer.csrf_token }}
+          
+          <label class="form-check text-muted">Transfer from account no: </label>
+          <div class="form-check form-check-primary">
+            
+            {{ render_field(new_transfer.accounts_from, autocomplete="off") }}
+          </div>
+          
+          <label class="form-check text-muted">Transfer to account no: </label>
+          <div class="form-check form-check-primary">
+            
+            {{ render_field(new_transfer.accounts_to, autocomplete="off") }}
+          </div>
+          
+          <label class="form-check text-muted">Amount</label>
+          <div class="form-check form-check-primary">
+            
+            {{ render_field(new_transfer.accounts_to, autocomplete="off") }}
+          </div>  
+          
+
+          <label class="form-check text-danger">Confirm the accounts are correct</label>
+          <div class="form-check form-check-success">
+            {{ render_field(new_transfer.confirmation, class="form-check-success")  }}
+          </div>
+
+          
+        
+        
+          
+        <div class="form-check form-check-primary">
+          <button type="submit" class="btn btn-rounded btn-info btn-md">Make Transfer</button>
+        </div>
+        </form>
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/static/javascript/defaultCheckbox.js"></script>
+<script src="/static/javascript/checkbox.js"></script>
+
+{% endblock %}
+

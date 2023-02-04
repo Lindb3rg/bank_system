@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData
-from forms import Issue_report_form,Deposition_form, Withdrawal_form
+from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form,Check_duplicate_account
 import datetime
 
 
@@ -122,7 +122,7 @@ def account_page(customer,id):
 
 
 
-
+### DEPOSIT ###
 @app.route("/deposit", methods = ["GET","POST"])
 def deposit():
     new_deposit = Deposition_form()
@@ -143,7 +143,7 @@ def deposition_confirmation():
 
 
 
-
+### WITHDRAW ###
 @app.route("/withdraw", methods = ["GET","POST"])
 def withdraw():
     new_withdrawal = Withdrawal_form()
@@ -165,7 +165,32 @@ def withdrawal_confirmation():
 
 
 
+### TRANSFER ###
+@app.route("/transfer/<customer_id>", methods = ["GET","POST"])
+def transfer(customer_id):
+    new_transfer = Transfer_form()
+    customer_accounts = Account.query.filter_by(CustomerId=customer_id)
+    for i in customer_accounts:
+        new_transfer.accounts_from.choices.append(i.Id)
+        new_transfer.accounts_to.choices.append(i.Id)
 
+
+    
+    if new_transfer.validate_on_submit():
+
+        return redirect("/transfer-confirmation")
+    
+
+    return render_template("transfer.html", new_transfer=new_transfer)
+
+
+@app.route("/transfer-confirmation")
+def transfer_confirmation():
+    return render_template("/transfer_confirmation.html")
+
+
+
+### REPORT ###
 @app.route("/report-form", methods = ["GET","POST"])
 def report_issue():
     form = Issue_report_form()
