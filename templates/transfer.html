@@ -15,24 +15,26 @@
         
         <form class="forms-sample" method="post">
           {{ new_transfer.csrf_token }}
+
+          <label class="form-check text-muted">Amount</label>
+          <div class="form-check form-check-primary">
+            
+            {{ render_field(new_transfer.amount, autocomplete="off") }}
+          </div>  
           
-          <label class="form-check text-muted">Transfer from account no: </label>
+          <label class="form-check text-muted">Transfer from: </label>
           <div class="form-check form-check-primary">
             
             {{ render_field(new_transfer.accounts_from, autocomplete="off") }}
           </div>
           
-          <label class="form-check text-muted">Transfer to account no: </label>
+          <label class="form-check text-muted">Transfer to: </label>
           <div class="form-check form-check-primary">
             
             {{ render_field(new_transfer.accounts_to, autocomplete="off") }}
           </div>
           
-          <label class="form-check text-muted">Amount</label>
-          <div class="form-check form-check-primary">
-            
-            {{ render_field(new_transfer.accounts_to, autocomplete="off") }}
-          </div>  
+          
           
 
           <label class="form-check text-danger">Confirm the accounts are correct</label>

@@ -19,19 +19,21 @@ class Issue_report_form(FlaskForm):
 
 class Deposition_form(FlaskForm):
     deposition = IntegerField('deposit', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
+    type = SelectField("type", choices=["Deposit cash","Salary","Transfer"], validators=[validators.DataRequired()])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
 
 class Withdrawal_form(FlaskForm):
     withdrawal = IntegerField('withdrawal', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
+    type = SelectField("type", choices=["Payment","Transfer"], validators=[validators.DataRequired()])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
 
 
 
 
 class Transfer_form(FlaskForm):
+    amount = IntegerField("amount",validators=[validators.DataRequired()])
     accounts_from = SelectField("accounts_from", choices=[],validators=[validators.DataRequired()])
     accounts_to = SelectField("accounts_to", choices=[],validators=[validators.DataRequired()])
-    amount = IntegerField("amount",validators=[validators.DataRequired()])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
     
 
