@@ -114,6 +114,7 @@ def account_page(customer,id):
     customer = customer
     account = Account.query.filter_by(Id=id)
     current_transactions = Transaction.query.filter_by(AccountId=id)
+    current_transactions = current_transactions.order_by(Transaction.Id.desc())
     
     
 
@@ -122,17 +123,31 @@ def account_page(customer,id):
 
 
 
-### DEPOSIT ###
-@app.route("/deposit", methods = ["GET","POST"])
-def deposit():
+
+### DEPOSIT ### Deposit cash, Salary, Transfer
+@app.route("/deposit/<id>", methods = ["GET","POST"])
+def deposit(id):
+    id = int(id)
+    
     new_deposit = Deposition_form()
     if new_deposit.validate_on_submit():
-        view_deposition = str(new_deposit.deposition.data)
-        return redirect("/deposition-confirmation?=" + view_deposition)
-    # id = int(id)
-    # customer = customer
-    # account = Account.query.filter_by(Id=id)
-    # current_transactions = Transaction.query.filter_by(AccountId=id)
+        account = Account.query.filter_by(Id=id)
+        deposit = Transaction()
+        deposit.AccountId = id
+        deposit.Type = "Debit"
+        deposit.Operation = new_deposit.type.data
+        deposit.Date = datetime.datetime.now()
+        deposit.Amount = new_deposit.deposition.data
+        for i in account:
+            deposit.NewBalance = i.Balance + new_deposit.deposition.data
+            i.Balance += new_deposit.deposition.data
+        
+        db.session.add(deposit)
+        db.session.commit()
+
+
+        return redirect("/deposition-confirmation")
+
 
     return render_template("deposit.html", new_deposit=new_deposit)
 
@@ -143,29 +158,44 @@ def deposition_confirmation():
 
 
 
-### WITHDRAW ###
-@app.route("/withdraw", methods = ["GET","POST"])
-def withdraw():
+### WITHDRAW ### Payment, Transfer
+@app.route("/withdraw/<id>", methods = ["GET","POST"])
+def withdraw(id):
+    id = int(id)
     new_withdrawal = Withdrawal_form()
     if new_withdrawal.validate_on_submit():
+        account = Account.query.filter_by(Id=id)
+
+        withdraw = Transaction()
+        withdraw.AccountId = id
+        withdraw.Type = "Credit"
+        withdraw.Operation = new_withdrawal.type.data
+        withdraw.Date = datetime.datetime.now()
+        withdraw.Amount = new_withdrawal.withdrawal.data
+        for i in account:
+            withdraw.NewBalance = i.Balance - new_withdrawal.withdrawal.data
+            i.Balance -= new_withdrawal.withdrawal.data
+        
+        db.session.add(withdraw)
+        db.session.commit()
 
         return redirect("/withdrawal-confirmation")
-    # id = int(id)
-    # customer = customer
-    # account = Account.query.filter_by(Id=id)
-    # current_transactions = Transaction.query.filter_by(AccountId=id)
+
 
     return render_template("withdraw.html", new_withdrawal=new_withdrawal)
 
 
 @app.route("/withdrawal-confirmation")
 def withdrawal_confirmation():
+
     # amount = request.args.get("deposition", " ")
     return render_template("/withdrawal_confirmation.html")
 
 
 
-### TRANSFER ###
+### TRANSFER ### Transfer + and -
+### accounts_from - amount > new transaction
+### accounts_to + amount > new transaction
 @app.route("/transfer/<customer_id>", methods = ["GET","POST"])
 def transfer(customer_id):
     new_transfer = Transfer_form()
@@ -174,9 +204,37 @@ def transfer(customer_id):
         new_transfer.accounts_from.choices.append(i.Id)
         new_transfer.accounts_to.choices.append(i.Id)
 
-
-    
     if new_transfer.validate_on_submit():
+        
+        account_from = Account.query.filter_by(Id=new_transfer.accounts_from.data)
+        withdraw = Transaction()
+        withdraw.AccountId = new_transfer.accounts_from.data
+        withdraw.Type = "Credit"
+        withdraw.Operation = "Transfer"
+        withdraw.Date = datetime.datetime.now()
+        withdraw.Amount = new_transfer.amount.data
+        for i in account_from:
+            withdraw.NewBalance = i.Balance - new_transfer.amount.data
+            i.Balance -= new_transfer.amount.data
+        
+        db.session.add(withdraw)
+        db.session.commit()
+
+
+
+        account_to = Account.query.filter_by(Id=new_transfer.accounts_to.data)
+        deposit = Transaction()
+        deposit.AccountId = new_transfer.accounts_to.data
+        deposit.Type = "Debit"
+        deposit.Operation = "Transfer"
+        deposit.Date = datetime.datetime.now()
+        deposit.Amount = new_transfer.amount.data
+        for i in account_to:
+            deposit.NewBalance = i.Balance + new_transfer.amount.data
+            i.Balance += new_transfer.amount.data
+        
+        db.session.add(deposit)
+        db.session.commit()
 
         return redirect("/transfer-confirmation")
     
