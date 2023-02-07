@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData
-from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form,Check_duplicate_account
+from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form
 import datetime
 
 
