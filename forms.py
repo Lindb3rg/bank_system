@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import Form,BooleanField,StringField,PasswordField,validators,ValidationError
-from wtforms.fields import IntegerField, TextAreaField, EmailField, FieldList, FormField, SelectField
+from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField, FloatField
 
 def Check_duplicate_account(account_from,account_to):
     if account_from == account_to:
@@ -18,7 +18,7 @@ class Issue_report_form(FlaskForm):
 
 
 class Deposition_form(FlaskForm):
-    deposition = IntegerField('deposit', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
+    deposition = FloatField('deposit', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
     type = SelectField("type", choices=["Deposit cash","Salary","Transfer"], validators=[validators.DataRequired()])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
 
@@ -32,7 +32,7 @@ class Withdrawal_form(FlaskForm):
 
 class Transfer_form(FlaskForm):
     amount = IntegerField("amount",validators=[validators.DataRequired()])
-    accounts_from = SelectField("accounts_from", choices=[],validators=[validators.DataRequired()])
+    # account_from = StringField("account_from", validators=[validators.DataRequired()])
     accounts_to = SelectField("accounts_to", choices=[],validators=[validators.DataRequired()])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
     

@@ -16,17 +16,19 @@
         <form class="forms-sample" method="post">
           {{ new_transfer.csrf_token }}
 
+          <label class="form-check text-muted">Transfer from: </label>
+          <div class="form-check form-check-primary">
+            <label class="form-check text-secondary font-weight-bold">Account no: {{ account_from }}</label>
+          </div>
+
+
           <label class="form-check text-muted">Amount</label>
           <div class="form-check form-check-primary">
             
             {{ render_field(new_transfer.amount, autocomplete="off") }}
           </div>  
           
-          <label class="form-check text-muted">Transfer from: </label>
-          <div class="form-check form-check-primary">
-            
-            {{ render_field(new_transfer.accounts_from, autocomplete="off") }}
-          </div>
+          
           
           <label class="form-check text-muted">Transfer to: </label>
           <div class="form-check form-check-primary">

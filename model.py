@@ -48,7 +48,7 @@ class Account(db.Model):
     Id = db.Column(db.Integer, primary_key=True)
     AccountType = db.Column(db.String(10), unique=False, nullable=False)
     Created = db.Column(db.DateTime, unique=False, nullable=False)
-    Balance = db.Column(db.Integer, unique=False, nullable=False)
+    Balance = db.Column(db.Float, unique=False, nullable=False)
     Transactions = db.relationship('Transaction', backref='Account',
      lazy=True)
     CustomerId = db.Column(db.Integer, db.ForeignKey('Customers.Id'), nullable=False)
@@ -60,8 +60,8 @@ class Transaction(db.Model):
     Type = db.Column(db.String(20), unique=False, nullable=False)
     Operation = db.Column(db.String(50), unique=False, nullable=False)
     Date = db.Column(db.DateTime, unique=False, nullable=False)
-    Amount = db.Column(db.Integer, unique=False, nullable=False)
-    NewBalance = db.Column(db.Integer, unique=False, nullable=False)
+    Amount = db.Column(db.Float, unique=False, nullable=False)
+    NewBalance = db.Column(db.Float, unique=False, nullable=False)
     AccountId = db.Column(db.Integer, db.ForeignKey('Accounts.Id'), nullable=False)
 
 

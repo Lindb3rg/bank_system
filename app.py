@@ -193,27 +193,41 @@ def withdrawal_confirmation():
 
 
 
+####### Håller på med transfer. Första ska vara ifyllt automatiskt
+
+
+
 ### TRANSFER ### Transfer + and -
 ### accounts_from - amount > new transaction
 ### accounts_to + amount > new transaction
-@app.route("/transfer/<customer_id>", methods = ["GET","POST"])
-def transfer(customer_id):
+@app.route("/transfer/<customer_id>/<account_from>", methods = ["GET","POST"])
+def transfer(customer_id,account_from):
+    customer_id = int(customer_id)
+    account_from = int(account_from)
     new_transfer = Transfer_form()
-    customer_accounts = Account.query.filter_by(CustomerId=customer_id)
+
+
+    customer_accounts = Customer.query.filter_by(Id=customer_id)
+
     for i in customer_accounts:
-        new_transfer.accounts_from.choices.append(i.Id)
-        new_transfer.accounts_to.choices.append(i.Id)
+        if i.Accounts:
+            for account in i.Accounts:
+                if account.Id == account_from:
+                    continue
+                else:
+                    new_transfer.accounts_to.choices.append(account.Id)
+        
 
     if new_transfer.validate_on_submit():
         
-        account_from = Account.query.filter_by(Id=new_transfer.accounts_from.data)
+
         withdraw = Transaction()
-        withdraw.AccountId = new_transfer.accounts_from.data
+        withdraw.AccountId = account_from
         withdraw.Type = "Credit"
         withdraw.Operation = "Transfer"
         withdraw.Date = datetime.datetime.now()
         withdraw.Amount = new_transfer.amount.data
-        for i in account_from:
+        for i in Account.query.filter_by(Id=account_from):
             withdraw.NewBalance = i.Balance - new_transfer.amount.data
             i.Balance -= new_transfer.amount.data
         
@@ -221,15 +235,13 @@ def transfer(customer_id):
         db.session.commit()
 
 
-
-        account_to = Account.query.filter_by(Id=new_transfer.accounts_to.data)
         deposit = Transaction()
         deposit.AccountId = new_transfer.accounts_to.data
         deposit.Type = "Debit"
         deposit.Operation = "Transfer"
         deposit.Date = datetime.datetime.now()
         deposit.Amount = new_transfer.amount.data
-        for i in account_to:
+        for i in Account.query.filter_by(Id=new_transfer.accounts_to.data):
             deposit.NewBalance = i.Balance + new_transfer.amount.data
             i.Balance += new_transfer.amount.data
         
@@ -239,7 +251,7 @@ def transfer(customer_id):
         return redirect("/transfer-confirmation")
     
 
-    return render_template("transfer.html", new_transfer=new_transfer)
+    return render_template("transfer.html", account_from = account_from, new_transfer=new_transfer)
 
 
 @app.route("/transfer-confirmation")
