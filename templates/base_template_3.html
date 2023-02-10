@@ -38,7 +38,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
           <div class="text-center">
-          <h3 class="text-muted">THE BANK.se</h3>
+          <h3 class="text-secondary">THE BANK.se</h3>
           </div>
           <!-- <a class="sidebar-brand brand-logo" href="/startpage"><img src="../static/template/assets/images/terminus.svg" alt="logo" /></a> -->
           <!-- <a class="sidebar-brand brand-logo-mini" href="/startpage"><img src="static/template/assets/images/terminus_small.svg" alt="logo" /></a> -->
@@ -51,7 +51,7 @@
           <li class="nav-item menu-items">
             <a class="nav-link" href="/">
               <span class="menu-icon">
-                <i class="mdi mdi-bank"></i>
+                <i class="mdi mdi-bank text-info"></i>
               </span>
               <span class="menu-title">Start Page</span>
             </a>
@@ -59,11 +59,31 @@
           <li class="nav-item menu-items">
             <a class="nav-link" href="/customers">
               <span class="menu-icon">
-                <i class="mdi mdi-account-multiple"></i>
+                <i class="mdi mdi-account-multiple text-primary"></i>
               </span>
               <span class="menu-title">Customers</span>
             </a>
           </li>
+          {% if current_user.has_role("Admin") %}
+          <li class="nav-item menu-items">
+            <a class="nav-link collapsed" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <span class="menu-icon">
+                <i class="mdi mdi-link-variant text-warning"></i>
+              </span>
+              <span class="menu-title">Admin Tools</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth" style="">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+              </ul>
+            </div>
+          </li>
+          {% endif %}
 
         </ul>
       </nav>
@@ -78,12 +98,69 @@
             <ul class="navbar-nav navbar-nav-right">
             
              
-              
-              
+              {% if current_user.has_role("Admin") %}
+              <li class="nav-item dropdown border-left show">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown" aria-expanded="true">
+                  <i class="mdi mdi-bell"></i>
+                  
+                  <!-- Om det finns aktiva ärenden  -->
+                  <span class="count bg-danger"></span>
+
+
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list " aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                  
+                  <a class="dropdown-item preview-item" href="/messages">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-message-alert text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">New Messages</p>
+                      <p class="text-muted ellipsis mb-0"> New messages pending...</p>
+                    </div>
+                  </a>
+
+                  <div class="dropdown-divider"></div>
+
+                  
+                  <!-- <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                      <p class="text-muted ellipsis mb-0"> Update dashboard </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-link-variant text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Launch Admin</p>
+                      <p class="text-muted ellipsis mb-0"> New admin wow! </p>
+                    </div>
+                  </a> -->
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all notifications</p>
+                </div>
+              </li>
+              {% endif %}
+
+
               <li class="nav-item dropdown">
                 <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                   <div class="navbar-profile">
-                    <h4 class="text-muted">
+                    <h4 class="text-secondary">
                     {% if current_user.is_authenticated %}
                     {{current_user.email}}
                     {%endif%}

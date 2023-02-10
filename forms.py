@@ -23,7 +23,7 @@ class Deposition_form(FlaskForm):
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
 
 class Withdrawal_form(FlaskForm):
-    withdrawal = IntegerField('withdrawal', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
+    withdrawal = FloatField('withdrawal', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
     type = SelectField("type", choices=["Payment","Transfer"], validators=[validators.DataRequired()])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
 
@@ -31,8 +31,7 @@ class Withdrawal_form(FlaskForm):
 
 
 class Transfer_form(FlaskForm):
-    amount = IntegerField("amount",validators=[validators.DataRequired()])
-    # account_from = StringField("account_from", validators=[validators.DataRequired()])
+    amount = FloatField("amount",validators=[validators.DataRequired()])
     accounts_to = SelectField("accounts_to", choices=[],validators=[validators.DataRequired()])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
     

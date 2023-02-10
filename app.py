@@ -35,7 +35,10 @@ def startpage():
     total_customers = len(Customer.query.all())
     total_accounts = len(Account.query.all())
     total_balance = Account.query.with_entities(func.sum(Account.Balance).label('total')).first().total
-    return render_template("start_page.html", total_customers=total_customers,total_accounts=total_accounts,total_balance=total_balance)
+    rounded_total_balance = round(total_balance, 2)
+
+    
+    return render_template("start_page.html", total_customers=total_customers,total_accounts=total_accounts,rounded_total_balance=rounded_total_balance)
 
 
 
@@ -47,6 +50,15 @@ def logout():
 
 
 
+@app.route("/messages")
+@auth_required()
+@roles_accepted("Admin","Cashier")
+def messages():
+    
+    return render_template("messages.html")
+
+
+
 
 
     
@@ -54,6 +66,9 @@ def logout():
 
 
 @app.route("/customers")
+@auth_required()
+@roles_accepted("Admin","Cashier")
+
 def customerspage():
     sortColumn = request.args.get('sortColumn', 'namn')
     sortOrder = request.args.get('sortOrder', 'asc')
@@ -98,7 +113,12 @@ def customerspage():
                     q = searchWord)
 
 
+
+
 @app.route("/customer/<id>")
+@auth_required()
+@roles_accepted("Admin","Cashier")
+
 def customer_page(id):
     customer = Customer.query.filter_by(Id=id).first()
     accounts = Account.query.filter_by(CustomerId=id)
@@ -108,7 +128,12 @@ def customer_page(id):
     return render_template("customer.html", customer=customer, accounts=accounts)
 
 
+
+
+
 @app.route("/account/<customer>/<id>")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def account_page(customer,id):
     id = int(id)
     customer = customer
@@ -125,7 +150,9 @@ def account_page(customer,id):
 
 
 ### DEPOSIT ### Deposit cash, Salary, Transfer
+
 @app.route("/deposit/<id>", methods = ["GET","POST"])
+
 def deposit(id):
     id = int(id)
     
@@ -159,7 +186,9 @@ def deposition_confirmation():
 
 
 ### WITHDRAW ### Payment, Transfer
+
 @app.route("/withdraw/<id>", methods = ["GET","POST"])
+
 def withdraw(id):
     id = int(id)
     new_withdrawal = Withdrawal_form()
@@ -193,14 +222,14 @@ def withdrawal_confirmation():
 
 
 
-####### Håller på med transfer. Första ska vara ifyllt automatiskt
 
 
 
-### TRANSFER ### Transfer + and -
-### accounts_from - amount > new transaction
-### accounts_to + amount > new transaction
+
+### TRANSFER ###
+
 @app.route("/transfer/<customer_id>/<account_from>", methods = ["GET","POST"])
+
 def transfer(customer_id,account_from):
     customer_id = int(customer_id)
     account_from = int(account_from)
@@ -251,7 +280,7 @@ def transfer(customer_id,account_from):
         return redirect("/transfer-confirmation")
     
 
-    return render_template("transfer.html", account_from = account_from, new_transfer=new_transfer)
+    return render_template("transfer.html", account_from = account_from, new_transfer=new_transfer,customer_accounts=customer_accounts)
 
 
 @app.route("/transfer-confirmation")
@@ -261,7 +290,9 @@ def transfer_confirmation():
 
 
 ### REPORT ###
+
 @app.route("/report-form", methods = ["GET","POST"])
+
 def report_issue():
     form = Issue_report_form()
     if form.validate_on_submit():
