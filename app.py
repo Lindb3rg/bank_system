@@ -137,7 +137,7 @@ def customer_page(id):
 def account_page(customer,id):
     id = int(id)
     customer = customer
-    account = Account.query.filter_by(Id=id)
+    account = Account.query.filter_by(Id=id).first()
     current_transactions = Transaction.query.filter_by(AccountId=id)
     current_transactions = current_transactions.order_by(Transaction.Id.desc())
     
@@ -192,8 +192,9 @@ def deposition_confirmation():
 def withdraw(id):
     id = int(id)
     new_withdrawal = Withdrawal_form()
-    if new_withdrawal.validate_on_submit():
-        account = Account.query.filter_by(Id=id)
+    account = Account.query.filter_by(Id=id).first()
+    if new_withdrawal.validate_on_submit() and new_withdrawal.withdrawal.data <= account.Balance:
+        
 
         withdraw = Transaction()
         withdraw.AccountId = id
@@ -201,14 +202,19 @@ def withdraw(id):
         withdraw.Operation = new_withdrawal.type.data
         withdraw.Date = datetime.datetime.now()
         withdraw.Amount = new_withdrawal.withdrawal.data
-        for i in account:
-            withdraw.NewBalance = i.Balance - new_withdrawal.withdrawal.data
-            i.Balance -= new_withdrawal.withdrawal.data
+        withdraw.NewBalance = account.Balance - new_withdrawal.withdrawal.data
+        account.Balance = account.Balance - new_withdrawal.withdrawal.data
         
         db.session.add(withdraw)
         db.session.commit()
 
         return redirect("/withdrawal-confirmation")
+    
+    elif new_withdrawal.validate_on_submit() and new_withdrawal.withdrawal.data >= account.Balance:
+        no_funds = "Not enough funds on account"
+        new_withdrawal.errors
+        return render_template("withdraw.html", new_withdrawal=new_withdrawal, no_funds=no_funds)
+        
 
 
     return render_template("withdraw.html", new_withdrawal=new_withdrawal)
@@ -233,9 +239,10 @@ def withdrawal_confirmation():
 def transfer(customer_id,account_from):
     customer_id = int(customer_id)
     account_from = int(account_from)
+    current_account = Account.query.filter_by(Id=account_from).first()
     new_transfer = Transfer_form()
 
-
+    
     customer_accounts = Customer.query.filter_by(Id=customer_id)
 
     for i in customer_accounts:
@@ -247,7 +254,7 @@ def transfer(customer_id,account_from):
                     new_transfer.accounts_to.choices.append(account.Id)
         
 
-    if new_transfer.validate_on_submit():
+    if new_transfer.validate_on_submit() and new_transfer.amount.data <= current_account.Balance:
         
 
         withdraw = Transaction()
