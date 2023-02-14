@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData
-from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form
+from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form, Transfer_form_external
 import datetime
 
 
@@ -128,6 +128,18 @@ def customer_page(id):
     return render_template("customer.html", customer=customer, accounts=accounts)
 
 
+# @app.route("/edit/<id>")
+# @auth_required()
+# @roles_accepted("Admin","Cashier")
+
+# def edit_customer_page(id):
+#     form = Edit_customer_form()
+
+    
+
+
+#     return render_template("edit_customer.html")
+
 
 
 
@@ -232,9 +244,9 @@ def withdrawal_confirmation():
 
 
 
-### TRANSFER ###
+### Internal TRANSFER ###
 
-@app.route("/transfer/<customer_id>/<account_from>", methods = ["GET","POST"])
+@app.route("/internal/<customer_id>/<account_from>", methods = ["GET","POST"])
 
 def transfer(customer_id,account_from):
     customer_id = int(customer_id)
@@ -287,12 +299,54 @@ def transfer(customer_id,account_from):
         return redirect("/transfer-confirmation")
     
 
-    return render_template("transfer.html", account_from = account_from, new_transfer=new_transfer,customer_accounts=customer_accounts)
+    return render_template("internal_transfer.html", account_from = account_from, new_transfer=new_transfer,customer_accounts=customer_accounts)
 
 
 @app.route("/transfer-confirmation")
 def transfer_confirmation():
     return render_template("/transfer_confirmation.html")
+
+
+@app.route("/external/<account_from>", methods = ["GET","POST"])
+def external_transfer(account_from):
+
+    new_transfer = Transfer_form_external()
+    if new_transfer.validate_on_submit():
+
+        current_account = Account.query.filter_by(Id=account_from).first()
+
+        external_account = Account.query.filter_by(Id=new_transfer.account_to.data).first()
+        
+        transaction_from = Transaction()
+        transaction_from.AccountId = account_from
+        transaction_from.Type = "Credit"
+        transaction_from.Operation = "Transfer"
+        transaction_from.Date = datetime.datetime.now()
+        transaction_from.Amount = new_transfer.amount.data
+        transaction_from.NewBalance = current_account.Balance - new_transfer.amount.data
+
+        transaction_to = Transaction()
+        transaction_to.AccountId = new_transfer.account_to.data
+        transaction_to.Type = "Debit"
+        transaction_to.Date = datetime.datetime.now()
+        transaction_to.Operation = "Transfer"
+        transaction_to.Amount = new_transfer.amount.data
+        transaction_to.NewBalance = external_account.Balance - new_transfer.amount.data
+
+        current_account.Balance -= new_transfer.amount.data
+        external_account.Balance += new_transfer.amount.data
+
+        db.session.add(transaction_from)
+        db.session.add(transaction_to)
+        db.session.commit()
+        return redirect("/transfer-confirmation")
+    
+    return render_template("external_transfer.html", account_from = account_from, new_transfer=new_transfer)
+
+
+
+
+    
 
 
 

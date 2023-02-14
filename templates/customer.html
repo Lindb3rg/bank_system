@@ -46,7 +46,10 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
                                 <a href="/withdraw/{{ account.Id }}" class="btn btn-rounded btn-warning btn-sm">Withdrawal</a>
                             </td>
                             <td>
-                                <a href="/transfer/{{ customer.Id }}/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm">Transfer</a>
+                                <a href="/internal/{{ customer.Id }}/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm">Internal Transfer</a>
+                            </td>
+                            <td>
+                                <a href="/external/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm">External Transfer</a>
                             </td>
                         </tr>{%endfor%}
                         

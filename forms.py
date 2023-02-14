@@ -1,8 +1,18 @@
 from flask_wtf import FlaskForm
 from wtforms import Form,BooleanField,StringField,PasswordField,validators,ValidationError
-from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField, FloatField
+from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField, FloatField,DecimalField
+from model import Account
 
+def check_for_account(form,field):
+    # account = Account.query.filter_by(Id=field.data).first()
+    # print(account)
+    if Account.query.filter_by(Id=field.data).first() == None:
+        raise ValidationError("Customer not existing")
+    
 
+def emailContains(form, field):
+    if not field.data.endswith('.se'):
+        raise ValidationError('Måste sluta på .se dummer')
 
 class Issue_report_form(FlaskForm):
     name = StringField('name', validators=[validators.DataRequired()])
@@ -16,27 +26,52 @@ class Issue_report_form(FlaskForm):
 
 
 class Deposition_form(FlaskForm):
-    deposition = FloatField('deposit', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
-    type = SelectField("type", choices=["Deposit cash","Salary","Transfer"], validators=[validators.DataRequired()])
-    confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
+    deposition = DecimalField('deposit', validators=[validators.DataRequired(message="Minimum 1 SEK"), validators.NumberRange(min=1,message="Minimum 1 SEK")])
+    type = SelectField("type", choices=["Deposit cash","Salary","Transfer"], validators=[validators.DataRequired(message="Please select an operation!")])
+    confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
 
 class Withdrawal_form(FlaskForm):
-    withdrawal = FloatField('withdrawal', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
-    type = SelectField("type", choices=["Payment","Transfer"], validators=[validators.DataRequired()])
-    confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
+    withdrawal = DecimalField('withdrawal', validators=[validators.DataRequired(message="Minimum 1 SEK"), validators.NumberRange(min=1,message="Minimum 1 SEK")])
+    type = SelectField("type", choices=["Payment","Transfer"], validators=[validators.DataRequired(message="Please select an operation!")])
+    confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
 
 
 
 
 class Transfer_form(FlaskForm): 
-    amount = FloatField("amount",validators=[validators.DataRequired(),validators.NumberRange(min=1)])
-    accounts_to = SelectField("accounts_to", choices=[],validators=[validators.DataRequired()])
-    confirmation = BooleanField("confirmation",validators=[validators.DataRequired()])
+    amount = DecimalField("amount",validators=[validators.DataRequired(message="Minimum 1 SEK"),validators.NumberRange(min=1,message="Minimum 1 SEK")])
+    accounts_to = SelectField("accounts_to", choices=[],validators=[validators.DataRequired(message="Please select an account!")])
+    confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
+
+class Transfer_form_external(FlaskForm): 
+    account_to = IntegerField("account_to", validators=[validators.DataRequired(),check_for_account])
+    amount = DecimalField("amount",validators=[validators.DataRequired(message="Minimum 1 SEK"),validators.NumberRange(min=1,message="Minimum 1 SEK")])
+    confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
     
 
 
-
+# class Edit_customer_form(FlaskForm):
+#     customer_columns = SelectField("accounts_to", choices=[],validators=[validators.DataRequired(message="Please select an account!")])
+#     new_data = StringField("new_data",validators=[validators.DataRequired()])
+#     confirm_new_data = StringField("new_data",validators=[validators.DataRequired()])
     
+#     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
+
+# # class Customer(db.Model):
+# #     __tablename__= "Customers"
+# #     Id = db.Column(db.Integer, primary_key=True)
+# #     GivenName = db.Column(db.String(50), unique=False, nullable=False)
+# #     Surname = db.Column(db.String(50), unique=False, nullable=False)
+# #     Streetaddress = db.Column(db.String(50), unique=False, nullable=False)
+# #     City = db.Column(db.String(50), unique=False, nullable=False)
+# #     Zipcode = db.Column(db.String(10), unique=False, nullable=False)
+# #     Country = db.Column(db.String(30), unique=False, nullable=False)
+# #     CountryCode = db.Column(db.String(2), unique=False, nullable=False)
+# #     Birthday = db.Column(db.DateTime, unique=False, nullable=False)
+# #     NationalId = db.Column(db.String(20), unique=False, nullable=False)
+# #     TelephoneCountryCode = db.Column(db.Integer, unique=False, nullable=False)
+# #     Telephone = db.Column(db.String(20), unique=False, nullable=False)
+# #     EmailAddress = db.Column(db.String(50), unique=False, nullable=False)
     
     
 

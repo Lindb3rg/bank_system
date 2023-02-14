@@ -10,7 +10,7 @@
   <div class="card">
     <div class="card-body">
       <div class="list-wrapper">
-        <h4 class="card-title">TRANSFER</h4>
+        <h4 class="card-title">EXTERNAL TRANSFER</h4>
 
         
         <form class="forms-sample" method="post">
@@ -33,7 +33,7 @@
           <label class="form-check text-muted">Transfer to: </label>
           <div class="form-check form-check-primary">
             
-            {{ render_field(new_transfer.accounts_to, autocomplete="off") }}
+            {{ render_field(new_transfer.account_to, autocomplete="off") }}
           </div>
           
           
