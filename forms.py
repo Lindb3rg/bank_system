@@ -10,6 +10,11 @@ def check_for_account(form,field):
         raise ValidationError("Customer not existing")
     
 
+
+def Null_Value(form,field):
+    if field.data == None:
+        return True
+
 def emailContains(form, field):
     if not field.data.endswith('.se'):
         raise ValidationError('Måste sluta på .se dummer')
@@ -51,14 +56,14 @@ class Transfer_form_external(FlaskForm):
 
 
 class Edit_customer_form(FlaskForm):
-    first_name = StringField("first_name")
-    last_name = StringField("last_name")
-    street_address = StringField("street_address")
-    city = StringField("city")
-    zipcode = IntegerField("zipcode")
-    country = StringField("country")
-    telephone = IntegerField("telephone")
-    email = EmailField("email")
+    first_name = StringField("first_name",default=None)
+    last_name = StringField("last_name",default=None)
+    street_address = StringField("street_address",default=None)
+    city = StringField("city",default=None)
+    zipcode = IntegerField("zipcode", validators=[validators.optional()],default=None)
+    country = SelectField("country", choices=[""],default=None)
+    telephone = IntegerField("telephone", validators=[validators.optional()],default=None)
+    email = EmailField("email",default=None)
     
 
 # # class Customer(db.Model):

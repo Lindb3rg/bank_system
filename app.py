@@ -362,10 +362,40 @@ def report_confirmation():
     return render_template("/report_confirmation.html")
 
 
-@app.route("/manage/<id>")
+@app.route("/manage/<id>", methods = ["GET","POST"])
 def manage_customer(id):
     form = Edit_customer_form()
-    customer = Customer.query.filter_by(Id=id).all()
+    customer = Customer.query.filter_by(Id=id)
+    for i in Customer.query.all():
+        if i.Country in form.country.choices:
+            break
+        form.country.choices.append(i.Country)
+    
+    if form.validate_on_submit():
+        for i in form.data.items():
+            if i[1] == None or i[1] == "":
+                continue
+            else:
+                if form.first_name.data:
+                    customer.GivenName = form.first_name.data
+                elif form.last_name.data:
+                    customer.Surname = form.last_name.data
+                elif form.street_address.data:
+                    customer.Streetaddress = form.street_address.data
+                elif form.city.data:
+                    customer.City = form.city.data
+                elif form.zipcode.data:
+                    customer.Zipcode = form.zipcode.data
+                elif form.country.data:
+                    customer.Country = form.country.data
+                elif form.telephone.data:
+                    customer.Telephone = form.telephone.data
+                elif form.email.data:
+                    customer.EmailAddress = form.email.data
+
+        db.session.commit(customer)
+
+
     return render_template("/manage_customer.html",customer=customer, form=form)
 
 
