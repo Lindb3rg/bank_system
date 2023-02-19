@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData
-from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form, Transfer_form_external
+from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form, Transfer_form_external, Edit_customer_form
 import datetime
 
 
@@ -128,17 +128,7 @@ def customer_page(id):
     return render_template("customer.html", customer=customer, accounts=accounts)
 
 
-# @app.route("/edit/<id>")
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
 
-# def edit_customer_page(id):
-#     form = Edit_customer_form()
-
-    
-
-
-#     return render_template("edit_customer.html")
 
 
 
@@ -370,6 +360,13 @@ def report_issue():
 def report_confirmation():
     # user_name = request.args.get("name", " ")
     return render_template("/report_confirmation.html")
+
+
+@app.route("/manage/<id>")
+def manage_customer(id):
+    form = Edit_customer_form()
+    customer = Customer.query.filter_by(Id=id).all()
+    return render_template("/manage_customer.html",customer=customer, form=form)
 
 
 

@@ -1,0 +1,167 @@
+{% from "_form_helpers.html" import render_field %}
+{% extends "base_template_3.html"%}
+
+
+{% block content %}
+
+
+
+<div class="col-12 stretch-card">
+  <div class="card">
+    <div class="card-body p-3px">
+
+        
+      <div class="p-3">
+      <lable class="display-4">Manage Customer <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#mymodal">Save</button></lable>
+      </div>
+      {% for i in customer %}
+      <table class="table">
+        <form class="forms-sample" method="post">
+          {{ form.csrf_token }}
+
+
+          <tr>
+            <td>ID</td>
+            <td>{{i.Id}}</td>
+            <td></td>
+            <td><lable class="display-5">Update information</lable></td>
+            
+          </tr>
+
+          <tr>
+            <td>First name</td>
+            <td>{{i.GivenName}}</td>
+            <td></td>
+            <td>{{ render_field(form.first_name, autocomplete="off") }}</td>
+            
+            
+          </tr>
+
+          <tr>
+            <td>Last name</td>
+            <td>{{i.Surname}}</td>
+            <td></td>
+            <td>{{ render_field(form.last_name, autocomplete="off") }}</td>
+            
+            
+          </tr>
+
+          <tr>
+            <td>Street address</td>
+            <td>{{i.Streetaddress}}</td>
+            <td></td>
+            <td>{{ render_field(form.street_address, autocomplete="off") }}</td>
+            
+            
+          </tr>
+
+          <tr>
+            <td>City</td>
+            <td>{{i.City}}</td>
+            <td></td>
+            <td>{{ render_field(form.city, autocomplete="off") }}</td>
+            
+            
+          </tr>
+
+          <tr>
+            <td>Zipcode</td>
+            <td>{{i.Zipcode}}</td>
+            <td></td>
+            <td>{{ render_field(form.zipcode, autocomplete="off") }}</td>
+            
+            
+          </tr>
+
+          <tr>
+            <td>Country</td>
+            <td>{{i.Country}}</td>
+            <td></td>
+            <td>{{ render_field(form.country, autocomplete="off") }}</td>
+            
+            
+          </tr>
+
+          <tr>
+            <td>Country Code</td>
+            <td>{{i.CountryCode}}</td>
+            <td></td>
+            <td></td>
+            
+          </tr>
+
+          <tr>
+            <td>Birthday</td>
+            <td>{{i.Birthday}}</td>
+            <td></td>
+            <td></td>
+            
+          </tr>
+
+          <tr>
+            <td>National ID</td>
+            <td>{{i.NationalId}}</td>
+            <td></td>
+            <td></td>
+            
+          </tr>
+
+          <tr>
+            <td>Telephone Country Code</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            
+          </tr>
+
+          <tr>
+            <td>Telephone</td>
+            <td>{{i.Telephone}}</td>
+            <td></td>
+            <td>{{ render_field(form.telephone, autocomplete="off") }}</td>
+            
+            
+          </tr>
+          
+          <tr>
+            <td>Email Address</td>
+            <td>{{i.EmailAddress}}</td>
+            <td></td>
+            <td>{{ render_field(form.email, autocomplete="off") }}</td>
+            
+          </tr>
+
+
+
+
+
+
+      </table>
+      {%endfor%}
+
+      
+        
+        
+
+    </div>
+  </div>
+</div>
+<div class="col-lg-12 grid-margin stretch-card">
+    
+  <div class="card align-items-center my-4">
+      
+      <div class="card-body">
+
+          
+          <div class="table-responsive">
+              <button  type ="submit" class="btn btn-rounded btn-success btn-lg" onclick="return confirm('are you sure?')">Update customer information</button>
+          </div>
+      </div>
+  </div>
+</div>  
+
+<script src="/static/javascript/defaultCheckbox.js"></script>
+<script src="/static/javascript/checkbox.js"></script>
+
+{% endblock %}
+

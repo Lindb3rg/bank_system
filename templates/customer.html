@@ -8,133 +8,144 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
 <div class="content-wrapper">
     <div class="col-lg-12 grid-margin stretch-card">
     
-    <div class="card">
-        
-        <div class="card-body">
-            <h4>{{customer.Surname}}, {{customer.GivenName}}</h4>
+        <div class="card">
             
-            <div class="table-responsive">
-            
-                <table class="table">
-                    <thead>
-                        
-                    <tr>
-
-
-                        <th>Balance</th>
-                        <th>Account ID</th>
-                        <th>Account Type</th>
-
-                    </tr>
-                    </thead>
-                    
-                    <tbody>
-                        {%  for account in accounts  %}
-                       
+            <div class="card-body">
+                <h4>{{customer.Surname}}, {{customer.GivenName}}</h4>
+                
+                <div class="table-responsive">
+                
+                    <table class="table">
+                        <thead>
+                            
                         <tr>
 
-                            <td>{{account.Balance}}</td>
-                            <td>{{account.Id}}</td>
-                            <td>{{account.AccountType}}</td>
-                            <td>
-                                <a href="/account/{{customer.Id}}/{{ account.Id }}" class="btn btn-rounded btn-primary btn-sm">Open</a>
-                            </td>
-                            <td>
-                                <a href="/deposit/{{ account.Id }}" class="btn btn-rounded btn-success btn-sm">Deposit</a>
-                            </td>
-                            <td>
-                                <a href="/withdraw/{{ account.Id }}" class="btn btn-rounded btn-warning btn-sm">Withdrawal</a>
-                            </td>
-                            <td>
-                                <a href="/internal/{{ customer.Id }}/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm">Internal Transfer</a>
-                            </td>
-                            <td>
-                                <a href="/external/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm">External Transfer</a>
-                            </td>
-                        </tr>{%endfor%}
+
+                            <th>Balance</th>
+                            <th>Account ID</th>
+                            <th>Account Type</th>
+
+                        </tr>
+                        </thead>
                         
-                    
-                    </tbody>
-                </table>
+                        <tbody>
+                            {%  for account in accounts  %}
+                        
+                            <tr>
+
+                                <td>{{account.Balance}}</td>
+                                <td>{{account.Id}}</td>
+                                <td>{{account.AccountType}}</td>
+                                <td>
+                                    <a href="/account/{{customer.Id}}/{{ account.Id }}" class="btn btn-rounded btn-primary btn-sm">Open</a>
+                                </td>
+                                <td>
+                                    <a href="/deposit/{{ account.Id }}" class="btn btn-rounded btn-success btn-sm">Deposit</a>
+                                </td>
+                                <td>
+                                    <a href="/withdraw/{{ account.Id }}" class="btn btn-rounded btn-warning btn-sm">Withdrawal</a>
+                                </td>
+                                <td>
+                                    <a href="/internal/{{ customer.Id }}/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm">Internal Transfer</a>
+                                </td>
+                                <td>
+                                    <a href="/external/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm">External Transfer</a>
+                                </td>
+                            </tr>{%endfor%}
+                            
+                        
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
-
-        </div>
-    </div>
-
-
-    
-
-        
+        </div>  
     </div>
 
     <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
-            <div class="table-responsive">
-                <table class="table table">
-                    <tbody>
-                        <tr>
-                            <td>User ID: </td>
-                            <td>{{customer.Id}}</td>
-                        </tr>
-                        <tr>
-                        <td>Name: </td>
-                        <td>{{customer.GivenName}} {{customer.Surname}}</td>
-                        </tr>
-                        <tr>
-                            <td>Street Address: </td>
-                            <td>{{customer.Streetaddress}}</td>
-                        </tr>
-                        <tr>
-                            <td>City: </td>
-                            <td>{{customer.City}}</td>
-                        </tr>
-                        <tr>
-                            <td>Zipcode: </td>
-                            <td>{{customer.Zipcode}}</td>
-                        </tr>
-                        <tr>
-                            <td>Country: </td>
-                            <td>{{customer.Country}}</td>
-                        </tr>
-                        <tr>
-                            <td>Country Code: </td>
-                            <td>{{customer.CountryCode}}</td>
-                        </tr>
-                        <tr>
-                            <td>Telephone: </td>
-                            <td>{{customer.Telephone}}</td>
-                        </tr>
-                        <tr>
-                            <td>Birthday: </td>
-                            <td>{{customer.Birthday}}</td>
-                        </tr>
-                        <tr>
-                            <td>National ID: </td>
-                            <td>{{customer.NationalId}}</td>
-                        </tr>
-                        <tr>
-                            <td>Telephone Country Code: </td>
-                            <td>{{customer.TelephoneCountryCode}}</td>
-                        </tr>
-                        <tr>
-                            <td>E-mail Address: </td>
-                            <td>{{customer.EmailAddress}}</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="/customers" class="btn btn-rounded btn-primary btn-sm">Back</a>
-                            </td>
-                        </tr>
+                <div class="table-responsive">
+                    <table class="table table">
+                        <tbody>
+                            <tr>
+                                <td>User ID: </td>
+                                <td>{{customer.Id}}</td>
+                            </tr>
+                            <tr>
+                            <td>Name: </td>
+                            <td>{{customer.GivenName}} {{customer.Surname}}</td>
+                            </tr>
+                            <tr>
+                                <td>Street Address: </td>
+                                <td>{{customer.Streetaddress}}</td>
+                            </tr>
+                            <tr>
+                                <td>City: </td>
+                                <td>{{customer.City}}</td>
+                            </tr>
+                            <tr>
+                                <td>Zipcode: </td>
+                                <td>{{customer.Zipcode}}</td>
+                            </tr>
+                            <tr>
+                                <td>Country: </td>
+                                <td>{{customer.Country}}</td>
+                            </tr>
+                            <tr>
+                                <td>Country Code: </td>
+                                <td>{{customer.CountryCode}}</td>
+                            </tr>
+                            <tr>
+                                <td>Telephone: </td>
+                                <td>{{customer.Telephone}}</td>
+                            </tr>
+                            <tr>
+                                <td>Birthday: </td>
+                                <td>{{customer.Birthday}}</td>
+                            </tr>
+                            <tr>
+                                <td>National ID: </td>
+                                <td>{{customer.NationalId}}</td>
+                            </tr>
+                            <tr>
+                                <td>Telephone Country Code: </td>
+                                <td>{{customer.TelephoneCountryCode}}</td>
+                            </tr>
+                            <tr>
+                                <td>E-mail Address: </td>
+                                <td>{{customer.EmailAddress}}</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <a href="/customers" class="btn btn-rounded btn-primary btn-sm">Back</a>
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
 
 
-                        
-                        
-                    </tbody>
-                </table>
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        
+    </div>
+    <div class="col-lg-12 grid-margin stretch-card">
+    
+        <div class="card align-items-center">
+            
+            <div class="card-body">
+
+                
+                <div class="table-responsive">
+                    <a href="/manage/{{customer.Id}}" class="btn btn-rounded btn-secondary btn-lg">Manage Customer Information</a>
+                </div>
             </div>
         </div>
-        </div>
-    </div>
-
+    </div>    
 </div>
 {% endblock %}    

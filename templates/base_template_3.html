@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='template/assets/vendors/css/vendor.bundle.base.css')}}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css')}}">
     <link rel="stylesheet" href="path-to/node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css" />
+    
 
     <!-- endinject -->
     <!-- Plugin css for this page -->
@@ -38,7 +39,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
           <div class="text-center">
-          <h3 class="text-secondary">THE BANK.se</h3>
+          <lable class="display-4">THE BANK.se</lable>
           </div>
           <!-- <a class="sidebar-brand brand-logo" href="/startpage"><img src="../static/template/assets/images/terminus.svg" alt="logo" /></a> -->
           <!-- <a class="sidebar-brand brand-logo-mini" href="/startpage"><img src="static/template/assets/images/terminus_small.svg" alt="logo" /></a> -->
@@ -64,6 +65,7 @@
               <span class="menu-title">Customers</span>
             </a>
           </li>
+          
           {% if current_user.has_role("Admin") %}
           <li class="nav-item menu-items">
             <a class="nav-link collapsed" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
@@ -244,6 +246,8 @@
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="static/template/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    
     
     <!-- endinject -->
     <!-- Plugin js for this page -->

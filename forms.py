@@ -50,12 +50,16 @@ class Transfer_form_external(FlaskForm):
     
 
 
-# class Edit_customer_form(FlaskForm):
-#     customer_columns = SelectField("accounts_to", choices=[],validators=[validators.DataRequired(message="Please select an account!")])
-#     new_data = StringField("new_data",validators=[validators.DataRequired()])
-#     confirm_new_data = StringField("new_data",validators=[validators.DataRequired()])
+class Edit_customer_form(FlaskForm):
+    first_name = StringField("first_name")
+    last_name = StringField("last_name")
+    street_address = StringField("street_address")
+    city = StringField("city")
+    zipcode = IntegerField("zipcode")
+    country = StringField("country")
+    telephone = IntegerField("telephone")
+    email = EmailField("email")
     
-#     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
 
 # # class Customer(db.Model):
 # #     __tablename__= "Customers"
