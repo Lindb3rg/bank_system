@@ -12,7 +12,8 @@
 
         
       <div class="p-3">
-      <lable class="display-4">Manage Customer <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#mymodal">Save</button></lable>
+      <lable class="display-4">Manage Customer</lable>
+      <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal" data-target="#mymodal">Deactivate Customer</button>
       </div>
       {% for i in customer %}
       <table class="table">
@@ -24,7 +25,7 @@
             <td>ID</td>
             <td>{{i.Id}}</td>
             <td></td>
-            <td><lable class="display-5">Update information</lable></td>
+            <td><lable class="display-6">Update information</lable></td>
             
           </tr>
 
@@ -156,7 +157,9 @@
           <div class="table-responsive">
               <button  type ="submit" class="btn btn-rounded btn-success btn-lg" onclick="return confirm('are you sure?')">Update customer information</button>
           </div>
+          
       </div>
+    
   </div>
 </div>  
 

@@ -372,28 +372,30 @@ def manage_customer(id):
         form.country.choices.append(i.Country)
     
     if form.validate_on_submit():
+        update_customer = Customer.query.filter_by(Id=id).first()
         for i in form.data.items():
-            if i[1] == None or i[1] == "":
+            if i[1] == None or i[1] == "" or i[0] == "csrf_token":
                 continue
             else:
-                if form.first_name.data:
-                    customer.GivenName = form.first_name.data
-                elif form.last_name.data:
-                    customer.Surname = form.last_name.data
-                elif form.street_address.data:
-                    customer.Streetaddress = form.street_address.data
-                elif form.city.data:
-                    customer.City = form.city.data
-                elif form.zipcode.data:
-                    customer.Zipcode = form.zipcode.data
-                elif form.country.data:
-                    customer.Country = form.country.data
-                elif form.telephone.data:
-                    customer.Telephone = form.telephone.data
-                elif form.email.data:
-                    customer.EmailAddress = form.email.data
+                if form.first_name.data == i[1]:
+                    update_customer.GivenName = form.first_name.data
+                elif form.last_name.data == i[1]:
+                    update_customer.Surname = form.last_name.data
+                elif form.street_address.data == i[1]:
+                    update_customer.Streetaddress = form.street_address.data
+                elif form.city.data == i[1]:
+                    update_customer.City = form.city.data
+                elif form.zipcode.data == i[1]:
+                    update_customer.Zipcode = form.zipcode.data
+                elif form.country.data == i[1]:
+                    update_customer.Country = form.country.data
+                elif form.telephone.data == i[1]:
+                    update_customer.Telephone = form.telephone.data
+                elif form.email.data == i[1]:
+                    update_customer.EmailAddress = form.email.data
 
-        db.session.commit(customer)
+        db.session.commit()
+        return redirect("/customer/" + id)
 
 
     return render_template("/manage_customer.html",customer=customer, form=form)
