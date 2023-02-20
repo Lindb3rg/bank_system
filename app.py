@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData
-from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form, Transfer_form_external, Edit_customer_form
+from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form, Transfer_form_external, Edit_customer_form,Register_customer_form
 import datetime
 
 
@@ -367,6 +367,57 @@ def Change_activity(id):
 def report_confirmation():
     # user_name = request.args.get("name", " ")
     return render_template("/report_confirmation.html")
+
+
+@app.route("/register", methods = ["GET","POST"])
+@auth_required()
+@roles_accepted("Admin","Cashier")
+def register_customer():
+    form = Register_customer_form()
+    for i in Customer.query.all():
+        if i.Country in form.country.choices:
+            break
+        form.country.choices.append(i.Country)
+
+    if form.validate_on_submit():
+        new_customer = Customer()
+        new_customer.GivenName = form.first_name.data
+        new_customer.Surname = form.last_name.data
+        new_customer.Streetaddress = form.street_address.data
+        new_customer.City = form.city.data
+        new_customer.Zipcode = form.zipcode.data
+        new_customer.Country = form.country.data
+        new_customer.CountryCode = "US"
+        new_customer.Telephone = form.telephone.data
+        new_customer.TelephoneCountryCode = 55
+        new_customer.EmailAddress = form.email.data
+        new_customer.Active = True
+        db.session.add(new_customer)
+        db.session.commit()
+
+        account_a = Account()
+        account_a.AccountType = "Personal"
+        account_a.Created = datetime.datetime.now()
+        account_a.Balance = 0
+        account_a.CustomerId = new_customer.Id
+
+        account_b = Account()
+        account_b.AccountType = "Personal"
+        account_b.Created = datetime.datetime.now()
+        account_b.Balance = 0
+        account_b.CustomerId = new_customer.Id
+
+        
+        db.session.add(account_a)
+        db.session.add(account_b)
+        db.session.commit()
+
+
+
+
+
+
+    return render_template("register_customer.html", form=form)
 
 
 

@@ -11,7 +11,7 @@ def check_for_account(form,field):
     
 
 def validate_length(form,field):
-    if field.data[0] == "zipcode":
+    if field.id == "zipcode":
         if len(field.data) > 5:
             raise ValidationError("Zip code must be 5 digits")    
     elif len(field.data) > 50:
@@ -69,10 +69,11 @@ class Register_customer_form(FlaskForm):
     last_name = StringField("last_name",validators=[validators.DataRequired(message="*required field*"),validate_length])
     street_address = StringField("street_address",validators=[validators.DataRequired(message="*required field*"),validate_length])
     city = StringField("city",validators=[validators.DataRequired(message="*required field*"),validate_length])
-    zipcode = IntegerField("zipcode", validators=[validators.DataRequired(message="*required field*"),validate_length])
+    zipcode = StringField("zipcode", validators=[validators.DataRequired(message="*required field*"),validate_length])
     country = SelectField("country", choices=[""],default=None)
     telephone = TelField("telephone", validators=[validators.DataRequired(message="*required field*")])
-    email = EmailField("email",validators=[validators.DataRequired(message="*required field*"),validators.Email])
+    email = EmailField("email",validators=[validators.DataRequired(message="*required field*"),validators.Email()])
+    confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="*required field*")])
 
     
 
