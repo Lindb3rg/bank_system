@@ -39,6 +39,7 @@ class Customer(db.Model):
     TelephoneCountryCode = db.Column(db.Integer, unique=False, nullable=False)
     Telephone = db.Column(db.String(20), unique=False, nullable=False)
     EmailAddress = db.Column(db.String(50), unique=False, nullable=False)
+    Active = db.Column(db.Boolean, unique=False, nullable=False, default=True)
 
     Accounts = db.relationship('Account', backref='Customer',
      lazy=True)

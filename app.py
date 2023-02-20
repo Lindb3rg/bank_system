@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request,redirect
+from flask import Flask, render_template, request,redirect,flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, upgrade
 from model import Customer,Account,Transaction
@@ -8,6 +8,7 @@ import os
 from model import db, seedData
 from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form, Transfer_form_external, Edit_customer_form
 import datetime
+
 
 
 
@@ -116,7 +117,7 @@ def customerspage():
 
 
 @app.route("/customer/<id>")
-@auth_required()
+# @auth_required()
 @roles_accepted("Admin","Cashier")
 
 def customer_page(id):
@@ -356,16 +357,27 @@ def report_issue():
     return render_template("/issue_report.html", form=form)
 
 
+def Change_activity(id):
+    customer = Customer.query.filter_by(Id=id)
+    customer.Active = False
+    db.session.commit()
+
+
 @app.route("/report-confirmation")
 def report_confirmation():
     # user_name = request.args.get("name", " ")
     return render_template("/report_confirmation.html")
 
 
+
 @app.route("/manage/<id>", methods = ["GET","POST"])
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def manage_customer(id):
     form = Edit_customer_form()
     customer = Customer.query.filter_by(Id=id)
+
+
     for i in Customer.query.all():
         if i.Country in form.country.choices:
             break
@@ -395,10 +407,33 @@ def manage_customer(id):
                     update_customer.EmailAddress = form.email.data
 
         db.session.commit()
+        flash("Customer updated successfully!")
         return redirect("/customer/" + id)
+    
 
 
     return render_template("/manage_customer.html",customer=customer, form=form)
+
+
+
+@app.route("/active/<id>")
+def deactivate_customer(id):
+    customer = Customer.query.filter_by(Id=id).first()
+    deactivate = request.args.get('deactivate')
+    if deactivate == "true":
+        customer.Active = False
+        db.session.commit()
+        return redirect("/customer/" + id)
+    
+    if deactivate == "false":
+        customer.Active = True
+        db.session.commit()
+        return redirect("/customer/" + id)
+
+    
+    
+
+    
 
 
 
@@ -407,6 +442,7 @@ def manage_customer(id):
 if __name__  == "__main__":
     with app.app_context():
         upgrade()
+
 
 
         seedData(app,db)

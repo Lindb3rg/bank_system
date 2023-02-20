@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import Form,BooleanField,StringField,PasswordField,validators,ValidationError
-from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField, FloatField,DecimalField
+from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField, FloatField,DecimalField,TelField
 from model import Account
 
 def check_for_account(form,field):
@@ -10,14 +10,13 @@ def check_for_account(form,field):
         raise ValidationError("Customer not existing")
     
 
+def validate_length(form,field):
+    if field.data[0] == "zipcode":
+        if len(field.data) > 5:
+            raise ValidationError("Zip code must be 5 digits")    
+    elif len(field.data) > 50:
+        raise ValidationError("Must be less than 50 characters")
 
-def Null_Value(form,field):
-    if field.data == None:
-        return True
-
-def emailContains(form, field):
-    if not field.data.endswith('.se'):
-        raise ValidationError('Måste sluta på .se dummer')
 
 class Issue_report_form(FlaskForm):
     name = StringField('name', validators=[validators.DataRequired()])
@@ -64,6 +63,17 @@ class Edit_customer_form(FlaskForm):
     country = SelectField("country", choices=[""],default=None)
     telephone = IntegerField("telephone", validators=[validators.optional()],default=None)
     email = EmailField("email",default=None)
+
+class Register_customer_form(FlaskForm):
+    first_name = StringField("first_name",validators=[validators.DataRequired(message="*required field*"),validate_length])
+    last_name = StringField("last_name",validators=[validators.DataRequired(message="*required field*"),validate_length])
+    street_address = StringField("street_address",validators=[validators.DataRequired(message="*required field*"),validate_length])
+    city = StringField("city",validators=[validators.DataRequired(message="*required field*"),validate_length])
+    zipcode = IntegerField("zipcode", validators=[validators.DataRequired(message="*required field*"),validate_length])
+    country = SelectField("country", choices=[""],default=None)
+    telephone = TelField("telephone", validators=[validators.DataRequired(message="*required field*")])
+    email = EmailField("email",validators=[validators.DataRequired(message="*required field*"),validators.Email])
+
     
 
 # # class Customer(db.Model):

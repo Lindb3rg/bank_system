@@ -6,13 +6,29 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
 
 {% block content %}
 <div class="content-wrapper">
+    
+    
     <div class="col-lg-12 grid-margin stretch-card">
+        
     
         <div class="card">
             
             <div class="card-body">
                 <h4>{{customer.Surname}}, {{customer.GivenName}}</h4>
+                {% with messages = get_flashed_messages() %}
+                {%if messages%}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                    {{message}}
+                </div>
+
                 
+                {%endfor%}
+                {%endif%}
+                {%endwith%}
                 <div class="table-responsive">
                 
                     <table class="table">
@@ -55,12 +71,29 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
                             
                         
                         </tbody>
+
+
+                                
+
+
                     </table>
+                    {%if customer.Active == True%}
+                    <div class="p-2">
+                        <icon class="mdi mdi-check-circle-outline text-success"></icon><lable class="display-6 text-success">  Active </lable>
+                    </div>
+                    {%endif%}
+                    {%if customer.Active == False%}
+                    <div class="p-2">
+                        <icon class="mdi mdi-alert-circle-outline text-danger"></icon><lable class="display-6 text-danger">  Not Active </lable>
+                    </div>
+                    {%endif%}
                 </div>
 
             </div>
-        </div>  
+        </div>
+          
     </div>
+    
 
     <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
@@ -142,10 +175,28 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
 
                 
                 <div class="table-responsive">
-                    <a href="/manage/{{customer.Id}}" class="btn btn-rounded btn-secondary btn-lg">Manage Customer Information</a>
+                    <a href="/manage/{{customer.Id}}" class="btn btn-primary btn-lg">Manage Customer Information</a>
+                    
+              
+                    {%if customer.Active == True%}
+                    <a href="/active/{{customer.Id}}?deactivate=true" class="btn btn-danger btn-lg">Deactivate Customer</a>
+                    {%endif%}
+                    {%if customer.Active == False%}
+                    <a href="/active/{{customer.Id}}?deactivate=false" class="btn btn-success btn-lg">Activate Customer</a>
+                    {%endif%}
+
                 </div>
+
+
+          
+          
+                
             </div>
+            
         </div>
-    </div>    
+    </div> 
+
+        
+
 </div>
 {% endblock %}    
