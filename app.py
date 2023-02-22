@@ -388,6 +388,10 @@ def register_customer():
         new_customer.Zipcode = form.zipcode.data
         new_customer.Country = form.country.data
         new_customer.CountryCode = "US"
+        new_customer.Birthday = form.birthday.data
+        format_to_string = str(form.birthday.data)
+        national_id = format_to_string.replace("-","")
+        new_customer.NationalId = f"{national_id}-{form.national_id.data}"
         new_customer.Telephone = form.telephone.data
         new_customer.TelephoneCountryCode = 55
         new_customer.EmailAddress = form.email.data

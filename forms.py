@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import Form,BooleanField,StringField,PasswordField,validators,ValidationError
-from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField, FloatField,DecimalField,TelField
+from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField, FloatField,DecimalField,TelField,DateField
 from model import Account
+from datetime import datetime
 
 def check_for_account(form,field):
     # account = Account.query.filter_by(Id=field.data).first()
@@ -13,9 +14,17 @@ def check_for_account(form,field):
 def validate_length(form,field):
     if field.id == "zipcode":
         if len(field.data) > 5:
-            raise ValidationError("Zip code must be 5 digits")    
+            raise ValidationError("Zip code must be 5 digits")  
+    elif field.id == "national_id":
+        field.data = str(field.data)
+        if len(field.data) != 4:
+            raise ValidationError("Must be 4 digits")  
     elif len(field.data) > 50:
         raise ValidationError("Must be less than 50 characters")
+
+def validate_date(form,field):
+    if field.data > datetime.now():
+        raise ValidationError("Date not valid after todays date")
 
 
 class Issue_report_form(FlaskForm):
@@ -71,6 +80,8 @@ class Register_customer_form(FlaskForm):
     city = StringField("city",validators=[validators.DataRequired(message="*required field*"),validate_length])
     zipcode = StringField("zipcode", validators=[validators.DataRequired(message="*required field*"),validate_length])
     country = SelectField("country", choices=[""],default=None)
+    birthday = DateField("birthday", validators=[validators.DataRequired()])
+    national_id = IntegerField("national_id", validators=[validators.DataRequired(message="*required field*"), validate_length])
     telephone = TelField("telephone", validators=[validators.DataRequired(message="*required field*")])
     email = EmailField("email",validators=[validators.DataRequired(message="*required field*"),validators.Email()])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="*required field*")])

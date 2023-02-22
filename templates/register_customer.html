@@ -32,7 +32,7 @@
 
           <tr>
             <td>First name</td>
-            <td>{{ render_field(form.first_name, autocomplete="off") }}</td>
+            <td>{{ render_field(form.first_name) }}</td>
             <td></td>
             
             
@@ -41,7 +41,7 @@
 
           <tr>
             <td>Last name</td>
-            <td>{{ render_field(form.last_name, autocomplete="off") }}</td>
+            <td>{{ render_field(form.last_name) }}</td>
             <td></td>
             
             
@@ -49,7 +49,7 @@
 
           <tr>
             <td>Street address</td>
-            <td>{{ render_field(form.street_address, autocomplete="off") }}</td>
+            <td>{{ render_field(form.street_address) }}</td>
             <td></td>
             
             
@@ -57,7 +57,7 @@
 
           <tr>
             <td>City</td>
-            <td>{{ render_field(form.city, autocomplete="off") }}</td>
+            <td>{{ render_field(form.city) }}</td>
             <td></td>
             
             
@@ -65,25 +65,37 @@
 
           <tr>
             <td>Zip Code</td>
-            <td>{{ render_field(form.zipcode, autocomplete="off") }}</td>
+            <td>{{ render_field(form.zipcode) }}</td>
             <td></td>
           </tr>
 
           <tr>
             <td>Country</td>
-            <td>{{ render_field(form.country, autocomplete="off") }}</td>
+            <td>{{ render_field(form.country) }}</td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td>Date of birth</td>
+            <td>{{ render_field(form.birthday) }}</td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td>National ID</td>
+            <td>{{ render_field(form.national_id, placeholder="4 digits") }}</td>
             <td></td>
           </tr>
 
           <tr>
             <td>Telephone</td>
-            <td>{{ render_field(form.telephone, autocomplete="off") }}</td>
+            <td>{{ render_field(form.telephone) }}</td>
             <td></td>
           </tr>
 
           <tr>
             <td>Email</td>
-            <td>{{ render_field(form.email, autocomplete="off") }}</td>
+            <td>{{ render_field(form.email) }}</td>
             <td></td>
           </tr>
           <tr>
