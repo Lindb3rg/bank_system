@@ -168,15 +168,19 @@ def deposit(id):
         deposit.Operation = new_deposit.type.data
         deposit.Date = datetime.datetime.now()
         deposit.Amount = new_deposit.deposition.data
+        new_deposit.deposition.data = float(new_deposit.deposition.data)
+
         for i in account:
             deposit.NewBalance = i.Balance + new_deposit.deposition.data
             i.Balance += new_deposit.deposition.data
+            customer = str(i.CustomerId)
         
         db.session.add(deposit)
         db.session.commit()
 
 
-        return redirect("/deposition-confirmation")
+        flash("Deposition done!")
+        return redirect("/customer/" + customer)
 
 
     return render_template("deposit.html", new_deposit=new_deposit)
@@ -188,6 +192,15 @@ def deposition_confirmation():
 
 
 
+
+
+
+
+
+
+
+
+
 ### WITHDRAW ### Payment, Transfer
 
 @app.route("/withdraw/<id>", methods = ["GET","POST"])
@@ -196,6 +209,7 @@ def withdraw(id):
     id = int(id)
     new_withdrawal = Withdrawal_form()
     account = Account.query.filter_by(Id=id).first()
+    customer = account.CustomerId
     if new_withdrawal.validate_on_submit() and new_withdrawal.withdrawal.data <= account.Balance:
         
 
@@ -205,13 +219,14 @@ def withdraw(id):
         withdraw.Operation = new_withdrawal.type.data
         withdraw.Date = datetime.datetime.now()
         withdraw.Amount = new_withdrawal.withdrawal.data
+        new_withdrawal.withdrawal.data = float(new_withdrawal.withdrawal.data)
         withdraw.NewBalance = account.Balance - new_withdrawal.withdrawal.data
         account.Balance = account.Balance - new_withdrawal.withdrawal.data
         
         db.session.add(withdraw)
         db.session.commit()
-
-        return redirect("/withdrawal-confirmation")
+        flash("Withdrawal done!")
+        return redirect("/customer/" + str(customer))
     
     elif new_withdrawal.validate_on_submit() and new_withdrawal.withdrawal.data >= account.Balance:
         no_funds = "Not enough funds on account"
@@ -240,7 +255,7 @@ def withdrawal_confirmation():
 @app.route("/internal/<customer_id>/<account_from>", methods = ["GET","POST"])
 
 def transfer(customer_id,account_from):
-    customer_id = int(customer_id)
+    customer_id = customer_id
     account_from = int(account_from)
     current_account = Account.query.filter_by(Id=account_from).first()
     new_transfer = Transfer_form()
@@ -266,6 +281,8 @@ def transfer(customer_id,account_from):
         withdraw.Operation = "Transfer"
         withdraw.Date = datetime.datetime.now()
         withdraw.Amount = new_transfer.amount.data
+        new_transfer.amount.data = float(new_transfer.amount.data)
+
         for i in Account.query.filter_by(Id=account_from):
             withdraw.NewBalance = i.Balance - new_transfer.amount.data
             i.Balance -= new_transfer.amount.data
@@ -287,11 +304,14 @@ def transfer(customer_id,account_from):
         db.session.add(deposit)
         db.session.commit()
 
-        return redirect("/transfer-confirmation")
+        flash("Transfer done!")
+        return redirect("/customer/" + customer_id)
     
 
     return render_template("internal_transfer.html", account_from = account_from, new_transfer=new_transfer,customer_accounts=customer_accounts)
 
+
+### External TRANSFER ###
 
 @app.route("/transfer-confirmation")
 def transfer_confirmation():
@@ -305,6 +325,7 @@ def external_transfer(account_from):
     if new_transfer.validate_on_submit():
 
         current_account = Account.query.filter_by(Id=account_from).first()
+        customer = str(current_account.CustomerId)
 
         external_account = Account.query.filter_by(Id=new_transfer.account_to.data).first()
         
@@ -314,6 +335,7 @@ def external_transfer(account_from):
         transaction_from.Operation = "Transfer"
         transaction_from.Date = datetime.datetime.now()
         transaction_from.Amount = new_transfer.amount.data
+        new_transfer.amount.data = float(new_transfer.amount.data)
         transaction_from.NewBalance = current_account.Balance - new_transfer.amount.data
 
         transaction_to = Transaction()
@@ -322,6 +344,7 @@ def external_transfer(account_from):
         transaction_to.Date = datetime.datetime.now()
         transaction_to.Operation = "Transfer"
         transaction_to.Amount = new_transfer.amount.data
+        new_transfer.amount.data = float(new_transfer.amount.data)
         transaction_to.NewBalance = external_account.Balance - new_transfer.amount.data
 
         current_account.Balance -= new_transfer.amount.data
@@ -330,13 +353,13 @@ def external_transfer(account_from):
         db.session.add(transaction_from)
         db.session.add(transaction_to)
         db.session.commit()
-        return redirect("/transfer-confirmation")
+        flash("Withdrawal done!")
+        return redirect("/customer/" + str(customer))
     
     return render_template("external_transfer.html", account_from = account_from, new_transfer=new_transfer)
 
 
-
-
+    
     
 
 
@@ -379,6 +402,7 @@ def register_customer():
             break
         form.country.choices.append(i.Country)
 
+   
     if form.validate_on_submit():
         new_customer = Customer()
         new_customer.GivenName = form.first_name.data
@@ -390,8 +414,8 @@ def register_customer():
         new_customer.CountryCode = "US"
         new_customer.Birthday = form.birthday.data
         format_to_string = str(form.birthday.data)
-        national_id = format_to_string.replace("-","")
-        new_customer.NationalId = f"{national_id}-{form.national_id.data}"
+        formatted_birthday = format_to_string.replace("-","")
+        new_customer.NationalId = f"{formatted_birthday}-{form.national_id.data}"
         new_customer.Telephone = form.telephone.data
         new_customer.TelephoneCountryCode = 55
         new_customer.EmailAddress = form.email.data
@@ -406,7 +430,7 @@ def register_customer():
         account_a.CustomerId = new_customer.Id
 
         account_b = Account()
-        account_b.AccountType = "Personal"
+        account_b.AccountType = "Checking"
         account_b.Created = datetime.datetime.now()
         account_b.Balance = 0
         account_b.CustomerId = new_customer.Id

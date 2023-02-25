@@ -1,8 +1,19 @@
 from flask_wtf import FlaskForm
 from wtforms import Form,BooleanField,StringField,PasswordField,validators,ValidationError
 from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField, FloatField,DecimalField,TelField,DateField
-from model import Account
+from model import Account, Customer
 from datetime import datetime
+
+def validate_national_id(form,field):
+    format_to_string = str(form.birthday.data)
+    formatted_birthday = format_to_string.replace("-","")
+    formatted_national_id = f"{formatted_birthday}-{form.national_id.data}"
+
+    for i in Customer.query.all():
+        if i.NationalId == formatted_national_id:
+            raise ValidationError("Customer already existing")
+
+            
 
 def check_for_account(form,field):
     # account = Account.query.filter_by(Id=field.data).first()
@@ -81,13 +92,22 @@ class Register_customer_form(FlaskForm):
     zipcode = StringField("zipcode", validators=[validators.DataRequired(message="*required field*"),validate_length])
     country = SelectField("country", choices=[""],default=None)
     birthday = DateField("birthday", validators=[validators.DataRequired()])
-    national_id = IntegerField("national_id", validators=[validators.DataRequired(message="*required field*"), validate_length])
+    national_id = IntegerField("national_id", validators=[validators.DataRequired(message="*required field*"), validate_length,validate_national_id])
     telephone = TelField("telephone", validators=[validators.DataRequired(message="*required field*")])
     email = EmailField("email",validators=[validators.DataRequired(message="*required field*"),validators.Email()])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="*required field*")])
 
-    
 
+
+
+#   __tablename__= "Accounts"
+#     Id = db.Column(db.Integer, primary_key=True)
+#     AccountType = db.Column(db.String(10), unique=False, nullable=False)
+#     Created = db.Column(db.DateTime, unique=False, nullable=False)
+#     Balance = db.Column(db.Float, unique=False, nullable=False)
+#     Transactions = db.relationship('Transaction', backref='Account',
+#      lazy=True)
+#     CustomerId = db.Column(db.Integer, db.ForeignKey('Customers.Id'), nullable=False)
 # # class Customer(db.Model):
 # #     __tablename__= "Customers"
 # #     Id = db.Column(db.Integer, primary_key=True)
