@@ -2,11 +2,13 @@
 
 <div class="form-group">
     
-    {{ field(class="form-control text-white", **kwargs)  }}
+    {{ field(class="form-control text-secondary", **kwargs)  }}
     
     {% for error in field.errors %}
-    <span class="help-block">
-        {{error}}</span>
+    <span class="badge pill bg-danger p-1 text-secondary">
+        {{error}}
+    </span>
+
     {% endfor   %}        
 </div>
 {% endmacro %}

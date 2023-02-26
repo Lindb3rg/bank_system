@@ -30,7 +30,7 @@ class FormsTestCases(unittest.TestCase):
         self.ctx = app.app_context()
         self.ctx.push()
         #self.client = app.test_client()
-        app.config["SERVER_NAME"] = "stefan.se"
+        app.config["SERVER_NAME"] = "adam.se"
         app.config['WTF_CSRF_ENABLED'] = False
         app.config['WTF_CSRF_METHODS'] = []  # This is the magic
         app.config['TESTING'] = True
@@ -93,9 +93,6 @@ class FormsTestCases(unittest.TestCase):
     #         ok = 'Måste sluta på .se dummer' in s
     #         self.assertTrue(ok)
 
-
-
-
     # def test_when_creating_new_should_be_ok_when_name_is_ok(self):
     #     test_client = app.test_client()
     #     with test_client:
@@ -109,3 +106,44 @@ class FormsTestCases(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
+
+# class Customer(db.Model):
+#     __tablename__= "Customers"
+#     Id = db.Column(db.Integer, primary_key=True)
+#     GivenName = db.Column(db.String(50), unique=False, nullable=False)
+#     Surname = db.Column(db.String(50), unique=False, nullable=False)
+#     Streetaddress = db.Column(db.String(50), unique=False, nullable=False)
+#     City = db.Column(db.String(50), unique=False, nullable=False)
+#     Zipcode = db.Column(db.String(10), unique=False, nullable=False)
+#     Country = db.Column(db.String(30), unique=False, nullable=False)
+#     CountryCode = db.Column(db.String(2), unique=False, nullable=False)
+#     Birthday = db.Column(db.DateTime, unique=False, nullable=False)
+#     NationalId = db.Column(db.String(20), unique=False, nullable=False)
+#     TelephoneCountryCode = db.Column(db.Integer, unique=False, nullable=False)
+#     Telephone = db.Column(db.String(20), unique=False, nullable=False)
+#     EmailAddress = db.Column(db.String(50), unique=False, nullable=False)
+#     Active = db.Column(db.Boolean, unique=False, nullable=False, default=True)
+
+#     Accounts = db.relationship('Account', backref='Customer',
+#      lazy=True)
+
+# class Account(db.Model):
+#     __tablename__= "Accounts"
+#     Id = db.Column(db.Integer, primary_key=True)
+#     AccountType = db.Column(db.String(10), unique=False, nullable=False)
+#     Created = db.Column(db.DateTime, unique=False, nullable=False)
+#     Balance = db.Column(db.Float, unique=False, nullable=False)
+#     Transactions = db.relationship('Transaction', backref='Account',
+#      lazy=True)
+#     CustomerId = db.Column(db.Integer, db.ForeignKey('Customers.Id'), nullable=False)
+
+
+# class Transaction(db.Model):
+#     __tablename__= "Transactions"
+#     Id = db.Column(db.Integer, primary_key=True)
+#     Type = db.Column(db.String(20), unique=False, nullable=False)
+#     Operation = db.Column(db.String(50), unique=False, nullable=False)
+#     Date = db.Column(db.DateTime, unique=False, nullable=False)
+#     Amount = db.Column(db.Float, unique=False, nullable=False)
+#     NewBalance = db.Column(db.Float, unique=False, nullable=False)
+#     AccountId = db.Column(db.Integer, db.ForeignKey('Accounts.Id'), nullable=False)

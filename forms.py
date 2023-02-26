@@ -8,12 +8,28 @@ def validate_national_id(form,field):
     format_to_string = str(form.birthday.data)
     formatted_birthday = format_to_string.replace("-","")
     formatted_national_id = f"{formatted_birthday}-{form.national_id.data}"
-
     for i in Customer.query.all():
         if i.NationalId == formatted_national_id:
             raise ValidationError("Customer already existing")
 
-            
+
+def validate_current_amount(form,field):
+    if field.id == "deposition":
+        if form.deposition.data > 15000:
+            raise ValidationError("Deposition limit 15000 SEK")
+    if field.id == "amount":
+        if form.amount.data > form.current_balance.data:
+            raise ValidationError("Not enough funds")
+
+    
+        
+
+def validate_active_customer(form,field):
+    if field.id == "first_name":
+        raise ValidationError("Manage not unavailable due to inactive customer")
+    else:
+        if form.is_active.data == False:
+            raise ValidationError("Transactions unavailable due to inactive customer")
 
 def check_for_account(form,field):
     # account = Account.query.filter_by(Id=field.data).first()
@@ -21,6 +37,8 @@ def check_for_account(form,field):
     if Account.query.filter_by(Id=field.data).first() == None:
         raise ValidationError("Customer not existing")
     
+
+
 
 def validate_length(form,field):
     if field.id == "zipcode":
@@ -50,32 +68,38 @@ class Issue_report_form(FlaskForm):
 
 
 class Deposition_form(FlaskForm):
-    deposition = DecimalField('deposit', validators=[validators.DataRequired(message="Minimum 1 SEK"), validators.NumberRange(min=1,message="Minimum 1 SEK")])
+    deposition = DecimalField('deposit', validators=[validators.DataRequired(message="Minimum 1 SEK"), validators.NumberRange(min=1,message="Minimum 1 SEK"),validate_current_amount,validate_active_customer])
     type = SelectField("type", choices=["Deposit cash","Salary","Transfer"], validators=[validators.DataRequired(message="Please select an operation!")])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
+    is_active = BooleanField("is_active")
 
 class Withdrawal_form(FlaskForm):
-    withdrawal = DecimalField('withdrawal', validators=[validators.DataRequired(message="Minimum 1 SEK"), validators.NumberRange(min=1,message="Minimum 1 SEK")])
+    current_balance = DecimalField("current_balance")
+    amount = DecimalField('amount', validators=[validators.DataRequired(message="Minimum 1 SEK"), validators.NumberRange(min=1,message="Minimum 1 SEK"),validate_current_amount,validate_active_customer])
+    is_active = BooleanField("is_active")
     type = SelectField("type", choices=["Payment","Transfer"], validators=[validators.DataRequired(message="Please select an operation!")])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
 
 
 
 
-class Transfer_form(FlaskForm): 
-    amount = DecimalField("amount",validators=[validators.DataRequired(message="Minimum 1 SEK"),validators.NumberRange(min=1,message="Minimum 1 SEK")])
+class Transfer_form_internal(FlaskForm): 
+    current_balance = DecimalField("current_balance")
+    amount = DecimalField("amount",validators=[validators.DataRequired(message="Minimum 1 SEK"),validators.NumberRange(min=1,message="Minimum 1 SEK"),validate_current_amount,validate_active_customer])
     accounts_to = SelectField("accounts_to", choices=[],validators=[validators.DataRequired(message="Please select an account!")])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
+    is_active = BooleanField("is_active")
 
-class Transfer_form_external(FlaskForm): 
+class Transfer_form_external(FlaskForm):
+    current_balance = DecimalField("current_balance")
     account_to = IntegerField("account_to", validators=[validators.DataRequired(),check_for_account])
-    amount = DecimalField("amount",validators=[validators.DataRequired(message="Minimum 1 SEK"),validators.NumberRange(min=1,message="Minimum 1 SEK")])
+    amount = DecimalField("amount",validators=[validators.DataRequired(message="Minimum 1 SEK"),validators.NumberRange(min=1,message="Minimum 1 SEK"),validate_current_amount,validate_active_customer])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
-    
+    is_active = BooleanField("is_active")
 
 
 class Edit_customer_form(FlaskForm):
-    first_name = StringField("first_name",default=None)
+    first_name = StringField("first_name",default=None, validators=[validate_active_customer])
     last_name = StringField("last_name",default=None)
     street_address = StringField("street_address",default=None)
     city = StringField("city",default=None)
@@ -83,6 +107,9 @@ class Edit_customer_form(FlaskForm):
     country = SelectField("country", choices=[""],default=None)
     telephone = IntegerField("telephone", validators=[validators.optional()],default=None)
     email = EmailField("email",default=None)
+    is_active = BooleanField("is_active")
+    
+
 
 class Register_customer_form(FlaskForm):
     first_name = StringField("first_name",validators=[validators.DataRequired(message="*required field*"),validate_length])

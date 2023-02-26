@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData
-from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form, Transfer_form_external, Edit_customer_form,Register_customer_form
+from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form_internal, Transfer_form_external, Edit_customer_form,Register_customer_form
 import datetime
 
 
@@ -123,10 +123,13 @@ def customerspage():
 def customer_page(id):
     customer = Customer.query.filter_by(Id=id).first()
     accounts = Account.query.filter_by(CustomerId=id)
+    total = 0
+    for account in accounts:
+        total += account.Balance
     
 
 
-    return render_template("customer.html", customer=customer, accounts=accounts)
+    return render_template("customer.html", customer=customer, accounts=accounts,total=total)
 
 
 
@@ -158,8 +161,10 @@ def account_page(customer,id):
 
 def deposit(id):
     id = int(id)
-    
+    account = Account.query.filter_by(Id=id).first()
     new_deposit = Deposition_form()
+    is_active = Customer.query.filter_by(Id=account.CustomerId).first()
+    new_deposit.is_active.data = is_active.Active
     if new_deposit.validate_on_submit():
         account = Account.query.filter_by(Id=id)
         deposit = Transaction()
@@ -185,10 +190,6 @@ def deposit(id):
 
     return render_template("deposit.html", new_deposit=new_deposit)
 
-@app.route("/deposition-confirmation")
-def deposition_confirmation():
-    amount = request.args.get("deposition", " ")
-    return render_template("/deposition_confirmation.html", deposition=amount)
 
 
 
@@ -196,12 +197,6 @@ def deposition_confirmation():
 
 
 
-
-
-
-
-
-### WITHDRAW ### Payment, Transfer
 
 @app.route("/withdraw/<id>", methods = ["GET","POST"])
 
@@ -209,8 +204,11 @@ def withdraw(id):
     id = int(id)
     new_withdrawal = Withdrawal_form()
     account = Account.query.filter_by(Id=id).first()
+    new_withdrawal.current_balance.data = account.Balance
+    is_active = Customer.query.filter_by(Id=account.CustomerId).first()
+    new_withdrawal.is_active.data = is_active.Active
     customer = account.CustomerId
-    if new_withdrawal.validate_on_submit() and new_withdrawal.withdrawal.data <= account.Balance:
+    if new_withdrawal.validate_on_submit():
         
 
         withdraw = Transaction()
@@ -218,21 +216,14 @@ def withdraw(id):
         withdraw.Type = "Credit"
         withdraw.Operation = new_withdrawal.type.data
         withdraw.Date = datetime.datetime.now()
-        withdraw.Amount = new_withdrawal.withdrawal.data
-        new_withdrawal.withdrawal.data = float(new_withdrawal.withdrawal.data)
-        withdraw.NewBalance = account.Balance - new_withdrawal.withdrawal.data
-        account.Balance = account.Balance - new_withdrawal.withdrawal.data
-        
+        withdraw.Amount = new_withdrawal.amount.data
+        new_withdrawal.amount.data = float(new_withdrawal.amount.data)
+        withdraw.NewBalance = account.Balance - new_withdrawal.amount.data
+        account.Balance = account.Balance - new_withdrawal.amount.data
         db.session.add(withdraw)
         db.session.commit()
         flash("Withdrawal done!")
         return redirect("/customer/" + str(customer))
-    
-    elif new_withdrawal.validate_on_submit() and new_withdrawal.withdrawal.data >= account.Balance:
-        no_funds = "Not enough funds on account"
-        new_withdrawal.errors
-        return render_template("withdraw.html", new_withdrawal=new_withdrawal, no_funds=no_funds)
-        
 
 
     return render_template("withdraw.html", new_withdrawal=new_withdrawal)
@@ -240,9 +231,10 @@ def withdraw(id):
 
 @app.route("/withdrawal-confirmation")
 def withdrawal_confirmation():
-
-    # amount = request.args.get("deposition", " ")
     return render_template("/withdrawal_confirmation.html")
+
+
+
 
 
 
@@ -258,10 +250,13 @@ def transfer(customer_id,account_from):
     customer_id = customer_id
     account_from = int(account_from)
     current_account = Account.query.filter_by(Id=account_from).first()
-    new_transfer = Transfer_form()
-
-    
+    current_balance = current_account.Balance
     customer_accounts = Customer.query.filter_by(Id=customer_id)
+    check_active = Customer.query.filter_by(Id=customer_id).first()
+    new_transfer = Transfer_form_internal()
+    new_transfer.current_balance.data = current_balance
+    new_transfer.is_active.data = check_active.Active
+    
 
     for i in customer_accounts:
         if i.Accounts:
@@ -272,9 +267,8 @@ def transfer(customer_id,account_from):
                     new_transfer.accounts_to.choices.append(account.Id)
         
 
-    if new_transfer.validate_on_submit() and new_transfer.amount.data <= current_account.Balance:
+    if new_transfer.validate_on_submit():
         
-
         withdraw = Transaction()
         withdraw.AccountId = account_from
         withdraw.Type = "Credit"
@@ -307,21 +301,38 @@ def transfer(customer_id,account_from):
         flash("Transfer done!")
         return redirect("/customer/" + customer_id)
     
-
     return render_template("internal_transfer.html", account_from = account_from, new_transfer=new_transfer,customer_accounts=customer_accounts)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### External TRANSFER ###
 
-@app.route("/transfer-confirmation")
-def transfer_confirmation():
-    return render_template("/transfer_confirmation.html")
-
-
 @app.route("/external/<account_from>", methods = ["GET","POST"])
 def external_transfer(account_from):
+    current_account = Account.query.filter_by(Id=account_from).first()
+    current_balance = current_account.Balance
+    check_active = Customer.query.filter_by(Id=current_account.CustomerId).first()
+    new_transfer = Transfer_form_internal()
+    new_transfer.current_balance.data = current_balance
+    new_transfer.is_active.data = check_active.Active
 
     new_transfer = Transfer_form_external()
+    new_transfer.current_balance.data = current_account.Balance
+
     if new_transfer.validate_on_submit():
 
         current_account = Account.query.filter_by(Id=account_from).first()
@@ -392,6 +403,8 @@ def report_confirmation():
     return render_template("/report_confirmation.html")
 
 
+# REGISTER CUSTOMER
+
 @app.route("/register", methods = ["GET","POST"])
 @auth_required()
 @roles_accepted("Admin","Cashier")
@@ -455,6 +468,8 @@ def register_customer():
 def manage_customer(id):
     form = Edit_customer_form()
     customer = Customer.query.filter_by(Id=id)
+    check_active = Customer.query.filter_by(Id=id).first()
+    check_active = check_active.Active
 
 
     for i in Customer.query.all():
@@ -491,7 +506,7 @@ def manage_customer(id):
     
 
 
-    return render_template("/manage_customer.html",customer=customer, form=form)
+    return render_template("/manage_customer.html",customer=customer, form=form, check_active=check_active)
 
 
 

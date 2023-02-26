@@ -15,7 +15,7 @@
       <lable class="display-4">Manage Customer</lable>
       
 
-
+      
       
       </div>
       {% for i in customer %}
@@ -134,7 +134,7 @@
             <td>{{ render_field(form.email, autocomplete="off") }}</td>
             
           </tr>
-
+       
 
 
 
@@ -156,10 +156,19 @@
       
       <div class="card-body">
 
-          
-          <div class="table-responsive">
+            {%if check_active%}
+
+        
+            <div class="table-responsive">
               <button  type ="submit" class="btn btn-rounded btn-success btn-lg" onclick="return confirm('are you sure?')">Update customer information</button>
-          </div>
+            </div>
+            {% else %}
+            <div class="table-responsive">
+              <lable class="display-5 text-danger">Customer Inactive - Editing not available</lable> 
+            </div>
+            
+            {%endif%}
+          
           
       </div>
     
@@ -174,30 +183,3 @@
 {% endblock %}
 
 
-
-<!-- <script>
-  function validateForm() {
-
-    let formlist = []
-    let firstname = document.forms["edit-form"]["fname"].value;
-    let lastname = document.forms["edit-form"]["lname"].value;
-    let address = document.forms["edit-form"]["address"].value;
-    let city = document.forms["edit-form"]["city"].value;
-    let zipcode = document.forms["edit-form"]["zipcode"].value;
-    let country = document.forms["edit-form"]["country"].value;
-    let telephone = document.forms["edit-form"]["telephone"].value;
-    let email = document.forms["edit-form"]["email"].value;
-    
-    formlist.push(firstname,lastname,address,city,zipcode,country,telephone,email)
-
-  
-    for (s in formlist) {
-      if (s != None){
-        return true;
-      }
-      else {
-        return false
-      }
-    }
-  }
-</script> -->
