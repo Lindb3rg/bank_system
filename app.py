@@ -14,13 +14,8 @@ import datetime
 
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = os.urandom(32)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://p22root:SntnJ8R2@p22.mysql.database.azure.com/bank_online'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:my-secret-pw@localhost/Bank'
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", 'pf9Wkove4IKEAXvy-cQkeDPhv9Cb3Ag-123asdasfasdf')
-app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT", '851453681323861735056780167285096341234')
-app.config["REMEMBER_COOKIE_SAMESITE"] = "strict"
-app.config["SESSION_COOKIE_SAMESITE"] = "strict"
+app.config.from_object("config.DebugConfig")
+
 
 
 db.app = app
@@ -31,8 +26,8 @@ migrate = Migrate(app,db)
 
 
 @app.route("/")
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def startpage():
     total_customers = len(Customer.query.all())
     total_accounts = len(Account.query.all())
@@ -53,8 +48,8 @@ def logout():
 
 
 @app.route("/messages")
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def messages():
     
     return render_template("messages.html")
@@ -68,8 +63,8 @@ def messages():
 
 
 @app.route("/customers")
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 
 def customerspage():
     sortColumn = request.args.get('sortColumn', 'namn')
@@ -118,8 +113,8 @@ def customerspage():
 
 
 @app.route("/customer/<id>")
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 
 def customer_page(id):
     customer = Customer.query.filter_by(Id=id).first()
@@ -139,8 +134,8 @@ def customer_page(id):
 
 
 @app.route("/account/<customer>/<id>")
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def account_page(customer,id):
     id = int(id)
     customer = customer
@@ -159,7 +154,8 @@ def account_page(customer,id):
 ### DEPOSIT ### Deposit cash, Salary, Transfer
 
 @app.route("/deposit/<id>", methods = ["GET","POST"])
-
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def deposit(id):
     id = int(id)
     account = Account.query.filter_by(Id=id).first()
@@ -200,7 +196,8 @@ def deposit(id):
 
 
 @app.route("/withdraw/<id>", methods = ["GET","POST"])
-
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def withdraw(id):
     id = int(id)
     new_withdrawal = Withdrawal_form()
@@ -230,12 +227,6 @@ def withdraw(id):
     return render_template("withdraw.html", new_withdrawal=new_withdrawal)
 
 
-@app.route("/withdrawal-confirmation")
-def withdrawal_confirmation():
-    return render_template("/withdrawal_confirmation.html")
-
-
-
 
 
 
@@ -246,7 +237,8 @@ def withdrawal_confirmation():
 ### Internal TRANSFER ###
 
 @app.route("/internal/<customer_id>/<account_from>", methods = ["GET","POST"])
-
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def transfer(customer_id,account_from):
     customer_id = customer_id
     account_from = int(account_from)
@@ -323,6 +315,8 @@ def transfer(customer_id,account_from):
 ### External TRANSFER ###
 
 @app.route("/external/<account_from>", methods = ["GET","POST"])
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def external_transfer(account_from):
     current_account = Account.query.filter_by(Id=account_from).first()
     current_balance = current_account.Balance
@@ -378,6 +372,8 @@ def external_transfer(account_from):
 ### REPORT ###
 
 @app.route("/report-form", methods = ["GET","POST"])
+@auth_required()
+@roles_accepted("Admin","Cashier")
 
 def report_issue():
     form = Issue_report_form()
@@ -460,8 +456,8 @@ def register_customer():
 
 
 @app.route("/manage/<id>", methods = ["GET","POST"])
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def manage_customer(id):
     form = Edit_customer_form()
     customer = Customer.query.filter_by(Id=id)
@@ -508,6 +504,8 @@ def manage_customer(id):
 
 
 @app.route("/active/<id>")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def deactivate_customer(id):
     customer = Customer.query.filter_by(Id=id).first()
     deactivate = request.args.get('deactivate')
