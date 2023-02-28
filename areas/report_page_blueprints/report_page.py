@@ -21,6 +21,6 @@ def report_issue():
         # time_date = todays_date.strftime("%Y-%m-%d %H:%M:%S")
         
 
-        return redirect("/report-confirmation?name=" + form.name.data)
+        return redirect("report_page_templates/report-confirmation?name=" + form.name.data)
 
-    return render_template("/issue_report.html", form=form)
+    return render_template("report_page_templates/issue_report.html", form=form)

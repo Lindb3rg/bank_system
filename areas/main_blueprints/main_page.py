@@ -22,7 +22,7 @@ def startpage():
     rounded_total_balance = round(total_balance, 2)
 
     
-    return render_template("start_page.html", total_customers=total_customers,total_accounts=total_accounts,rounded_total_balance=rounded_total_balance)
+    return render_template("/main_templates/start_page.html", total_customers=total_customers,total_accounts=total_accounts,rounded_total_balance=rounded_total_balance)
 
 
 
