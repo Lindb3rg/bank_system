@@ -1,5 +1,6 @@
 /.DS_Store
 /__pycache__
+__pycache__/
 /base_template_3_full_html.text
 /content_wrapper_divs.text
 /env

@@ -7,30 +7,15 @@ from datetime import datetime
 
 
 
-# def set_current_user(app, ds, email):
-#     """Set up so that when request is received,
-#     the token will cause 'user' to be made the current_user
-#     """
-
-#     def token_cb(request):
-#         if request.headers.get("Authentication-Token") == "token":
-#             return ds.find_user(email=email)
-#         return app.security.login_manager.anonymous_user()
-
-#     app.security.login_manager.request_loader(token_cb)
-
-
 init = False
 
 class FormsTestCases(unittest.TestCase):
-    # def __init__(self, *args, **kwargs):
-    #     super(FormsTestCases, self).__init__(*args, **kwargs)
+
     def tearDown(self):
         self.ctx.pop()
     def setUp(self):
         self.ctx = app.app_context()
         self.ctx.push()
-        # self.client = app.test_client()
         app.config["SERVER_NAME"] = "adam.se"
         app.config['WTF_CSRF_ENABLED'] = False
         app.config['WTF_CSRF_METHODS'] = []  # This is the magic
@@ -126,32 +111,32 @@ class FormsTestCases(unittest.TestCase):
     #     customer.Country = "Gåseborg"
     #     customer.CountryCode = "55"
     #     customer.Birthday = datetime.now()
-    #     customer.NationalId = "12344"
-    #     customer.TelephoneCountryCode = 45
-    #     customer.Telephone = "12343"
-    #     customer.EmailAddress = "kalle@anka.se"
-    #     customer.Active = True
+        # customer.NationalId = "12344"
+        # customer.TelephoneCountryCode = 45
+        # customer.Telephone = "12343"
+        # customer.EmailAddress = "kalle@anka.se"
+        # customer.Active = True
 
 
-    #     db.session.add(customer)
-    #     db.session.commit()
+        # db.session.add(customer)
+        # db.session.commit()
 
-    #     account_a = Account()
-    #     account_a.AccountType = "personal"
-    #     account_a.Balance = 200
-    #     account_a.Created = datetime.now()
-    #     account_a.CustomerId = customer.Id
-    #     db.session.add(account_a)
-    #     db.session.commit()
+        # account_a = Account()
+        # account_a.AccountType = "personal"
+        # account_a.Balance = 200
+        # account_a.Created = datetime.now()
+        # account_a.CustomerId = customer.Id
+        # db.session.add(account_a)
+        # db.session.commit()
 
-    #     test_client = app.test_client()
-    #     user = User.query.get(1)
-    #     with test_client:
-    #         url = '/deposit/' + str(account_a.Id)
-    #         response = test_client.post(url, data={ "deposition":"16000", "type":"Salary","confirmation":"True","is_active":"True"})
-    #         s = response.data.decode("utf-8") 
-    #         ok = 'Deposition limit 15000 SEK' in s
-    #         self.assertTrue(ok)
+        # test_client = app.test_client()
+        # user = User.query.get(1)
+        # with test_client:
+        #     url = '/deposit/' + str(account_a.Id)
+        #     response = test_client.post(url, data={ "deposition":"16000", "type":"Salary","confirmation":"True","is_active":"True"})
+        #     s = response.data.decode("utf-8") 
+        #     ok = 'Deposition limit 15000 SEK' in s
+        #     self.assertTrue(ok)
     
 
 
@@ -198,7 +183,7 @@ class FormsTestCases(unittest.TestCase):
     #         url = '/deposit/' + str(account_a.Id)
     #         response = test_client.post(url, data={ "deposition":"0", "type":"Salary","confirmation":"True","is_active":"True"})
     #         s = response.data.decode("utf-8") 
-    #         ok = 'Minimum 1 SEK' in s
+    #         ok = 'Cannot use negative values. Must be at least 1 SEK' in s
     #         self.assertTrue(ok)
 
     
