@@ -90,11 +90,12 @@
                 <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
                 <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
                 <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
+                {% endif %}
                 <!-- <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li> -->
               </ul>
             </div>
           </li>
-          {% endif %}
+          
 
         </ul>
       </nav>
@@ -173,7 +174,7 @@
                   <div class="navbar-profile">
                     <h4 class="text-secondary">
                     {% if current_user.is_authenticated %}
-                    {{current_user.email}}
+                    <lable class="display-4 text-muted">{{current_user.email}}</lable>
                     {%endif%}
                     </h4>
                     <p class="mb-0 d-none d-sm-block navbar-profile-name">
@@ -184,7 +185,7 @@
                   </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
-                  <h6 class="p-3 mb-0">Profile</h6>
+                  <h6 class="p-3 mb-0 text-muted">Profile</h6>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item preview-item">
                     <div class="preview-thumbnail">

@@ -11,8 +11,8 @@ accounts_BP = Blueprint('accounts_BP', __name__)
 
 
 @accounts_BP.route("/account/<customer>/<id>")
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def account_page(customer,id):
     id = int(id)
     customer = customer
@@ -28,8 +28,8 @@ def account_page(customer,id):
 
 @accounts_BP.route("/deposit/<id>", methods = ["GET","POST"])
 
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def deposit(id):
     id = int(id)
     account = Account.query.filter_by(Id=id).first()
@@ -65,8 +65,8 @@ def deposit(id):
 
 
 @accounts_BP.route("/withdraw/<id>", methods = ["GET","POST"])
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 
 def withdraw(id):
     id = int(id)
@@ -104,8 +104,8 @@ def withdraw(id):
 
 
 @accounts_BP.route("/internal/<customer_id>/<account_from>", methods = ["GET","POST"])
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 
 def transfer(customer_id,account_from):
     customer_id = customer_id
@@ -171,8 +171,8 @@ def transfer(customer_id,account_from):
 
 
 @accounts_BP.route("/external/<account_from>", methods = ["GET","POST"])
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def external_transfer(account_from):
     current_account = Account.query.filter_by(Id=account_from).first()
     current_balance = current_account.Balance

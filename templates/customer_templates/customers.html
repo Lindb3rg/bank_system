@@ -13,7 +13,7 @@ Customers
         <h6>Page {{ page }} of total {{ pages }}</h6>
     </div>
 
-    <div class="col-lg-10 grid-margin stretch-card">
+    <div class="col-lg-12 grid-margin stretch-card">
         <div class="card mx-auto">
             <div class="card-body ">
             
@@ -29,7 +29,7 @@ Customers
     </div>
     
         
-    <div class="col-lg-10 grid-margin stretch-card">
+    <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
         <div class="card-body">
             <div class="table-responsive">
@@ -79,12 +79,11 @@ Customers
                         <td></td>
                         <td>
                             {% if has_next %}
-                            <a class="btn btn-rounded btn-secondary btn-sm" href="/customers?page={{ page + 1 }}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">
+                            <a class="btn btn-rounded btn-secondary btn-sm float-right" href="/customers?page={{ page + 1 }}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">
                                 Next
                             </a>
                             {% endif %}
                         </td>
-
                     </tr>
 
 

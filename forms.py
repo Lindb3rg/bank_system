@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import Form,BooleanField,StringField,PasswordField,validators,ValidationError
-from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField, FloatField,DecimalField,TelField,DateField
+from wtforms import Form,BooleanField,StringField,validators,ValidationError
+from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField,DecimalField,TelField,DateField
 from model import Account, Customer
 from datetime import datetime
 
@@ -44,7 +44,6 @@ def check_for_account(form,field):
     
 
 
-
 def validate_length(form,field):
     if field.id == "zipcode":
         if len(field.data) > 5:
@@ -59,6 +58,17 @@ def validate_length(form,field):
 def validate_date(form,field):
     if field.birthdate > datetime.now():
         raise ValidationError("Date not valid after todays date")
+
+
+
+
+
+
+
+
+
+
+
 
 
 class Issue_report_form(FlaskForm):

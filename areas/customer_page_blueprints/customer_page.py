@@ -12,8 +12,8 @@ customers_BP = Blueprint('customer_BP', __name__)
 
 
 @customers_BP.route("/customers")
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 
 def customerspage():
     sortColumn = request.args.get('sortColumn', 'namn')
@@ -63,8 +63,8 @@ def customerspage():
 
 
 @customers_BP.route("/customer/<id>")
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 
 def customer_page(id):
     customer = Customer.query.filter_by(Id=id).first()
@@ -83,8 +83,8 @@ def customer_page(id):
 
 
 @customers_BP.route("/active/<id>")
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 def deactivate_customer(id):
     customer = Customer.query.filter_by(Id=id).first()
     deactivate = request.args.get('deactivate')
@@ -105,8 +105,8 @@ def deactivate_customer(id):
 
 
 @customers_BP.route("/register", methods = ["GET","POST"])
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 
 def register_customer():
     form = Register_customer_form()
@@ -165,8 +165,8 @@ def register_customer():
 
 
 @customers_BP.route("/manage/<id>", methods = ["GET","POST"])
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
+@auth_required()
+@roles_accepted("Admin","Cashier")
 
 def manage_customer(id):
     form = Edit_customer_form()
