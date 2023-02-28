@@ -21,19 +21,24 @@ def validate_current_amount(form,field):
         if form.amount.data > form.current_balance.data:
             raise ValidationError("Not enough funds")
 
-    
+def validate_current_account(form,field):
+    form.current_account.data = float(form.current_account.data)
+    if form.account_to.data == form.current_account.data:
+        raise ValidationError("Cannot transfer to same account")
+
+def validate_negative_numbers(form,field):
+    if field.data < 1:
+        raise ValidationError("Cannot use negative values. Must be at least 1 SEK")
         
 
 def validate_active_customer(form,field):
     if field.id == "first_name":
         raise ValidationError("Manage not unavailable due to inactive customer")
-    else:
-        if form.is_active.data == False:
-            raise ValidationError("Transactions unavailable due to inactive customer")
+    if form.is_active.data == False:
+        raise ValidationError("Transactions unavailable due to inactive customer")
+
 
 def check_for_account(form,field):
-    # account = Account.query.filter_by(Id=field.data).first()
-    # print(account)
     if Account.query.filter_by(Id=field.data).first() == None:
         raise ValidationError("Customer not existing")
     
@@ -52,7 +57,7 @@ def validate_length(form,field):
         raise ValidationError("Must be less than 50 characters")
 
 def validate_date(form,field):
-    if field.data > datetime.now():
+    if field.birthdate > datetime.now():
         raise ValidationError("Date not valid after todays date")
 
 
@@ -68,14 +73,17 @@ class Issue_report_form(FlaskForm):
 
 
 class Deposition_form(FlaskForm):
-    deposition = DecimalField('deposit', validators=[validators.DataRequired(message="Minimum 1 SEK"), validators.NumberRange(min=1,message="Minimum 1 SEK"),validate_current_amount,validate_active_customer])
+    deposition = DecimalField('deposit', validators=[validate_negative_numbers,validate_current_amount,validate_active_customer])
     type = SelectField("type", choices=["Deposit cash","Salary","Transfer"], validators=[validators.DataRequired(message="Please select an operation!")])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
     is_active = BooleanField("is_active")
 
+
+
+
 class Withdrawal_form(FlaskForm):
     current_balance = DecimalField("current_balance")
-    amount = DecimalField('amount', validators=[validators.DataRequired(message="Minimum 1 SEK"), validators.NumberRange(min=1,message="Minimum 1 SEK"),validate_current_amount,validate_active_customer])
+    amount = DecimalField('amount', validators=[validate_negative_numbers,validate_current_amount,validate_active_customer])
     is_active = BooleanField("is_active")
     type = SelectField("type", choices=["Payment","Transfer"], validators=[validators.DataRequired(message="Please select an operation!")])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
@@ -85,15 +93,18 @@ class Withdrawal_form(FlaskForm):
 
 class Transfer_form_internal(FlaskForm): 
     current_balance = DecimalField("current_balance")
-    amount = DecimalField("amount",validators=[validators.DataRequired(message="Minimum 1 SEK"),validators.NumberRange(min=1,message="Minimum 1 SEK"),validate_current_amount,validate_active_customer])
+    amount = DecimalField("amount",validators=[validate_negative_numbers,validate_current_amount,validate_active_customer])
     accounts_to = SelectField("accounts_to", choices=[],validators=[validators.DataRequired(message="Please select an account!")])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
     is_active = BooleanField("is_active")
 
+
+
 class Transfer_form_external(FlaskForm):
+    current_account = IntegerField("current_account")
     current_balance = DecimalField("current_balance")
     account_to = IntegerField("account_to", validators=[validators.DataRequired(),check_for_account])
-    amount = DecimalField("amount",validators=[validators.DataRequired(message="Minimum 1 SEK"),validators.NumberRange(min=1,message="Minimum 1 SEK"),validate_current_amount,validate_active_customer])
+    amount = DecimalField("amount",validators=[validate_negative_numbers,validate_current_amount,validate_active_customer,validate_current_account])
     confirmation = BooleanField("confirmation",validators=[validators.DataRequired(message="Confirmation needed!")])
     is_active = BooleanField("is_active")
 
@@ -126,34 +137,3 @@ class Register_customer_form(FlaskForm):
 
 
 
-
-#   __tablename__= "Accounts"
-#     Id = db.Column(db.Integer, primary_key=True)
-#     AccountType = db.Column(db.String(10), unique=False, nullable=False)
-#     Created = db.Column(db.DateTime, unique=False, nullable=False)
-#     Balance = db.Column(db.Float, unique=False, nullable=False)
-#     Transactions = db.relationship('Transaction', backref='Account',
-#      lazy=True)
-#     CustomerId = db.Column(db.Integer, db.ForeignKey('Customers.Id'), nullable=False)
-# # class Customer(db.Model):
-# #     __tablename__= "Customers"
-# #     Id = db.Column(db.Integer, primary_key=True)
-# #     GivenName = db.Column(db.String(50), unique=False, nullable=False)
-# #     Surname = db.Column(db.String(50), unique=False, nullable=False)
-# #     Streetaddress = db.Column(db.String(50), unique=False, nullable=False)
-# #     City = db.Column(db.String(50), unique=False, nullable=False)
-# #     Zipcode = db.Column(db.String(10), unique=False, nullable=False)
-# #     Country = db.Column(db.String(30), unique=False, nullable=False)
-# #     CountryCode = db.Column(db.String(2), unique=False, nullable=False)
-# #     Birthday = db.Column(db.DateTime, unique=False, nullable=False)
-# #     NationalId = db.Column(db.String(20), unique=False, nullable=False)
-# #     TelephoneCountryCode = db.Column(db.Integer, unique=False, nullable=False)
-# #     Telephone = db.Column(db.String(20), unique=False, nullable=False)
-# #     EmailAddress = db.Column(db.String(50), unique=False, nullable=False)
-    
-    
-
-    
-
-
-    

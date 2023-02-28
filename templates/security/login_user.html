@@ -27,7 +27,7 @@
         {% endif %}
         <div class="fs-gap">
           {{ render_field_with_errors(login_user_form.password, class="form-control p_input") }}</div>
-        {{ render_field_with_errors(login_user_form.remember) }}
+        <!-- {{ render_field_with_errors(login_user_form.remember) }} -->
         {{ render_field_errors(login_user_form.csrf_token) }}
         
         
@@ -92,13 +92,13 @@
             <label>Password *</label>
             <input type="text" class="form-control p_input">
           </div>
-          <div class="form-group d-flex align-items-center justify-content-between">
+          <!-- <div class="form-group d-flex align-items-center justify-content-between">
             <div class="form-check">
               <label class="form-check-label">
                 <input type="checkbox" class="form-check-input"> Remember me <i class="input-helper"></i></label>
             </div>
             <a href="#" class="forgot-pass">Forgot password</a>
-          </div>
+          </div> -->
           <div class="text-center">
             <button type="submit" class="btn btn-primary btn-block enter-btn">Login</button>
           </div>

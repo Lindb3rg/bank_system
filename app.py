@@ -15,6 +15,7 @@ import datetime
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(32)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://p22root:SntnJ8R2@p22.mysql.database.azure.com/bank_online'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:my-secret-pw@localhost/Bank'
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", 'pf9Wkove4IKEAXvy-cQkeDPhv9Cb3Ag-123asdasfasdf')
 app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT", '851453681323861735056780167285096341234')
@@ -30,8 +31,8 @@ migrate = Migrate(app,db)
 
 
 @app.route("/")
-@auth_required()
-@roles_accepted("Admin","Cashier")
+# @auth_required()
+# @roles_accepted("Admin","Cashier")
 def startpage():
     total_customers = len(Customer.query.all())
     total_accounts = len(Account.query.all())
@@ -52,8 +53,8 @@ def logout():
 
 
 @app.route("/messages")
-@auth_required()
-@roles_accepted("Admin","Cashier")
+# @auth_required()
+# @roles_accepted("Admin","Cashier")
 def messages():
     
     return render_template("messages.html")
@@ -67,8 +68,8 @@ def messages():
 
 
 @app.route("/customers")
-@auth_required()
-@roles_accepted("Admin","Cashier")
+# @auth_required()
+# @roles_accepted("Admin","Cashier")
 
 def customerspage():
     sortColumn = request.args.get('sortColumn', 'namn')
@@ -118,7 +119,7 @@ def customerspage():
 
 @app.route("/customer/<id>")
 # @auth_required()
-@roles_accepted("Admin","Cashier")
+# @roles_accepted("Admin","Cashier")
 
 def customer_page(id):
     customer = Customer.query.filter_by(Id=id).first()
@@ -138,8 +139,8 @@ def customer_page(id):
 
 
 @app.route("/account/<customer>/<id>")
-@auth_required()
-@roles_accepted("Admin","Cashier")
+# @auth_required()
+# @roles_accepted("Admin","Cashier")
 def account_page(customer,id):
     id = int(id)
     customer = customer
@@ -326,11 +327,10 @@ def external_transfer(account_from):
     current_account = Account.query.filter_by(Id=account_from).first()
     current_balance = current_account.Balance
     check_active = Customer.query.filter_by(Id=current_account.CustomerId).first()
-    new_transfer = Transfer_form_internal()
+    new_transfer = Transfer_form_external()
+    new_transfer.current_account.data = account_from
     new_transfer.current_balance.data = current_balance
     new_transfer.is_active.data = check_active.Active
-
-    new_transfer = Transfer_form_external()
     new_transfer.current_balance.data = current_account.Balance
 
     if new_transfer.validate_on_submit():
@@ -391,10 +391,7 @@ def report_issue():
     return render_template("/issue_report.html", form=form)
 
 
-def Change_activity(id):
-    customer = Customer.query.filter_by(Id=id)
-    customer.Active = False
-    db.session.commit()
+
 
 
 @app.route("/report-confirmation")
@@ -454,17 +451,17 @@ def register_customer():
         db.session.commit()
 
 
-
-
-
-
     return render_template("register_customer.html", form=form)
 
 
 
+
+
+
+
 @app.route("/manage/<id>", methods = ["GET","POST"])
-@auth_required()
-@roles_accepted("Admin","Cashier")
+# @auth_required()
+# @roles_accepted("Admin","Cashier")
 def manage_customer(id):
     form = Edit_customer_form()
     customer = Customer.query.filter_by(Id=id)
