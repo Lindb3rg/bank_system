@@ -62,13 +62,13 @@ def customerspage():
 
 
 
-@customers_BP.route("/customer/<id>")
+@customers_BP.route("/customer/<customer_id>")
 @auth_required()
 @roles_accepted("Admin","Cashier")
 
-def customer_page(id):
-    customer = Customer.query.filter_by(Id=id).first()
-    accounts = Account.query.filter_by(CustomerId=id)
+def customer_page(customer_id):
+    customer = Customer.query.filter_by(Id=customer_id).first()
+    accounts = Account.query.filter_by(CustomerId=customer_id)
     total = 0
     for account in accounts:
         total += account.Balance

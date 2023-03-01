@@ -9,6 +9,7 @@ app.config.from_object("config.DebugConfig")
 db.app = app
 db.init_app(app)
 migrate = Migrate(app,db)
+app.static_folder = 'static'
     
 from areas.main_blueprints.main_page import main_page
 from areas.account_page_blueprints.account_page import accounts_BP

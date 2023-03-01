@@ -1,10 +1,23 @@
 {% extends "base_template_3.html" %}
 
+
 {% block title %}
 Customer {{customer.Surname}}, {{customer.GivenName }}
 {% endblock %}
 
 {% block content %}
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{ url_for('static',filename='template/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='template/assets/vendors/css/vendor.bundle.base.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='/css/style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='/css/popup_css.css')}}">
+    <link rel="stylesheet" href="path-to/node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='/template/assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='/template/assets/images/favicon.png')}}">
+  </head>
 <div class="content-wrapper">
     
     
@@ -15,24 +28,6 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
             
             <div class="card-body">
                 <lable class="display-4 p-2">{{customer.Surname}}, {{customer.GivenName}}</lable>
-                <button class="btn btn-rounded btn-success btn-sm float-right p-2" onclick="openForm()">Add account</button>
-
-                <div class="form-popup" id="myForm">
-                <form action="/action_page.php" class="form-container card">
-                    <h1>Login</h1>
-
-                    <label for="email"><b>Email</b></label>
-                    <input type="text" placeholder="Enter Email" name="email" required>
-
-                    <label for="psw"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="psw" required>
-
-                    <button type="submit" class="btn">Login</button>
-                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-                </form>
-                </div>
-                
-                
                 
                 
                 {% with messages = get_flashed_messages() %}
@@ -71,19 +66,19 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
                                 <td>{{account.Id}}</td>
                                 <td>{{account.AccountType}}</td>
                                 <td>
-                                    <a href="/account/{{customer.Id}}/{{ account.Id }}" class="btn btn-rounded btn-primary btn-sm">Open</a>
+                                    <a href="/account/{{customer.Id}}/{{ account.Id }}" class="btn btn-rounded btn-primary py-1 px-2 btn-sm">Open</a>
                                 </td>
                                 <td>
-                                    <a href="/deposit/{{account.Id}}" class="btn btn-rounded btn-success btn-sm">Deposit</a>
+                                    <a href="/deposit/{{account.Id}}" class="btn btn-rounded btn-success py-1 px-2 btn-sm">Deposit</a>
                                 </td>
                                 <td>
-                                    <a href="/withdraw/{{ account.Id }}" class="btn btn-rounded btn-warning btn-sm">Withdrawal</a>
+                                    <a href="/withdraw/{{ account.Id }}" class="btn btn-rounded btn-warning btn-sm py-1 px-2">Withdrawal</a>
                                 </td>
                                 <td>
-                                    <a href="/internal/{{ customer.Id }}/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm">Internal Transfer</a>
+                                    <a href="/internal/{{ customer.Id }}/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm py-1 px-2">Internal Transfer</a>
                                 </td>
                                 <td>
-                                    <a href="/external/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm">External Transfer</a>
+                                    <a href="/external/{{ account.Id }}" class="btn btn-rounded btn-info btn-sm py-1 px-2">External Transfer</a>
                                 </td>
                             </tr>
 
@@ -173,7 +168,7 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
                             
                             <tr>
                                 <td>
-                                    <a href="/customers" class="btn btn-rounded btn-primary btn-sm">Back</a>
+                                    <a href="/customers" class="btn btn-rounded btn-primary btn-sm py-1 px-4">Back</a>
                                 </td>
                                 <td>
 
@@ -208,17 +203,35 @@ Customer {{customer.Surname}}, {{customer.GivenName }}
                     {%endif%}
 
                 </div>
-
-
-          
-          
                 
             </div>
             
         </div>
     </div> 
 
-        
+    <script>
+        // When the user clicks on <div>, open the popup
+        function myFunction() {
+          var popup = document.getElementById("add_account");
+          popup.classList.toggle("show");
+        }
+    </script>
 
+
+    
 </div>
-{% endblock %}    
+{% endblock %}
+{%block scripts%}
+<script src="/static/javascript/checkbox.js"></script>
+<script src="static/template/assets/js/off-canvas.js"></script>
+<script src="static/template/assets/js/hoverable-collapse.js"></script>
+<script src="static/template/assets/js/misc.js"></script>
+<script src="static/template/assets/js/settings.js"></script>
+<script src="static/template/assets/js/todolist.js"></script>
+<script src="static/template/assets/js/chart.js "></script>
+<script src="path-to/node_modules/chart.js/dist/Chart.min.js"></script>
+<script src="/Users/Adam/Documents/WEB_PROGRAMMERING/Koder/bank_system/static/javascript/charter.js"></script>
+<script src="/static/javascript/popup_javascript.js"></script>
+{%endblock%}
+
+    

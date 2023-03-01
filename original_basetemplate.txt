@@ -30,9 +30,9 @@
     <!-- inject:css -->
     <!-- endinject -->
     <!-- Layout styles -->
-    <link rel="stylesheet" href="{{ url_for('static',filename='/template/assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='template/assets/css/style.css')}}">
     <!-- End layout styles -->
-    <link rel="stylesheet" href="{{ url_for('static',filename='/template/assets/images/favicon.png')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='template/assets/images/favicon.png')}}">
   </head>
   <body>
     <div class="container-scroller">
@@ -75,7 +75,7 @@
             </a>
           </li>
           
-          <!-- {% if current_user.has_role("Admin") %}
+          {% if current_user.has_role("Admin") %}
           <li class="nav-item menu-items">
             <a class="nav-link collapsed" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
               <span class="menu-icon">
@@ -94,7 +94,7 @@
                 
               </ul>
             </div>
-          </li> -->
+          </li>
           
 
         </ul>
@@ -110,13 +110,13 @@
             <ul class="navbar-nav navbar-nav-right">
             
              
-              <!-- {% if current_user.has_role("Admin") %}
+              {% if current_user.has_role("Admin") %}
               <li class="nav-item dropdown border-left show">
                 <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown" aria-expanded="true">
                   <i class="mdi mdi-bell"></i>
                   
-                  Om det finns aktiva ärenden  -->
-                  <!-- <span class="count bg-danger"></span>
+                  <!-- Om det finns aktiva ärenden  -->
+                  <span class="count bg-danger"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list " aria-labelledby="notificationDropdown">
                   <h6 class="p-3 mb-0">Notifications</h6>
@@ -163,17 +163,17 @@
                   <div class="dropdown-divider"></div>
                   <p class="p-3 mb-0 text-center">See all notifications</p>
                 </div>
-              </li> -->
-              <!-- {% endif %} -->
+              </li>
+              {% endif %}
 
               {% if current_user.is_authenticated %}
               <li class="nav-item dropdown">
-                <a class="nav-link" id="profileDropdown" href="" data-toggle="dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                   <div class="navbar-profile">
                     <h4 class="text-secondary">
                     
                     <lable class="display-6 text-muted">{{current_user.email}}</lable>
-                    
+                    {%endif%}
                     
                     </h4>
                     <p class="mb-0 d-none d-sm-block navbar-profile-name">
@@ -197,7 +197,6 @@
                       <p class="preview-subject mb-1">Settings</p>
                     </div>
                   </a>
-                  {%endif%}
                   {% if current_user.is_authenticated %}
                   <div class="dropdown-divider"></div> 
                   <a class="dropdown-item preview-item" href="/logout">

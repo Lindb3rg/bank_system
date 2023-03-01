@@ -1,4 +1,5 @@
 {% extends "base_template_3.html" %}
+
 {% block title %}
 Customers
 {% endblock %}
@@ -8,9 +9,10 @@ Customers
 {% block content %}
 
 
+
 <div class="content-wrapper">
     <div class="page-header">
-        <h6>Page {{ page }} of total {{ pages }}</h6>
+        <lable class="display-4">Page {{ page }} of total {{ pages }}</lable>
     </div>
 
     <div class="col-lg-12 grid-margin stretch-card">
@@ -37,23 +39,24 @@ Customers
                 <thead>
 
                     <tr>
+                        
                         <td>
-                            <h4>Name</h4>
-                            <a href="/customers?sortColumn=namn&sortOrder=asc&q={{ q }}">
-                                <span class="text-muted"><i class='mdi mdi-arrow-up-bold'></i></span>
-                            </a>
-                            <a href="/customers?sortColumn=namn&sortOrder=desc&q={{ q }}">
-                                <span class="text-muted"><i class='mdi mdi-arrow-down-bold'></i></span>
-                            </a>
+                            <h4 class="display-5">Name</h4>
+                            
+                            <a href="/customers?sortColumn=namn&sortOrder=asc&q={{ q }}"><i class='mdi mdi-arrow-up text-muted'></i></a>
+                            <a href="/customers?sortColumn=namn&sortOrder=desc&q={{ q }}"><i class='mdi mdi-arrow-down text-muted'></i></a>
+
+    
                         </td>
+
+
+
                         <td>
-                            <h4>City</h4>
-                            <a href="/customers?sortColumn=city&sortOrder=asc&q={{ q }}">
-                                <span class="text-muted"><i class='mdi mdi-arrow-up-bold'></i></span>
-                            </a>
-                            <a href="/customers?sortColumn=city&sortOrder=desc&q={{ q }}">
-                                <span class="text-muted"><i class='mdi mdi-arrow-down-bold'></i></span>
-                            </a>
+                            <h4 class="display-5">City</h4>
+                            
+                            <a href="/customers?sortColumn=city&sortOrder=asc&q={{ q }}"><i class='mdi mdi-arrow-up text-muted'></i></a>
+                            <a href="/customers?sortColumn=city&sortOrder=desc&q={{ q }}"><i class='mdi mdi-arrow-down text-muted'></i></a>
+
     
                         </td>
                         <td></td>
@@ -65,13 +68,13 @@ Customers
                         <td>{{ p.GivenName }}, {{p.Surname }}</td>            
                         <td>{{ p.City }}</td>
                         <td>
-                            <a href="/customer/{{ p.Id }}" class="btn btn-rounded btn-primary btn-sm float-right">Visit</a>
+                            <a href="/customer/{{ p.Id }}" class="btn btn-rounded btn-primary btn-sm py-1 px-4 float-right">Visit</a>
                         </td>
                     </tr>{%endfor%}
                     <tr>
                         <td>
                             {% if has_prev %}
-                            <a class="btn btn-rounded btn-secondary btn-sm" href="/customers?page={{ page - 1 }}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">
+                            <a class="btn btn-rounded btn-secondary py-1 px-4 btn-sm" href="/customers?page={{ page - 1 }}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">
                             Previous
                             </a>
                             {% endif %}
@@ -79,7 +82,7 @@ Customers
                         <td></td>
                         <td>
                             {% if has_next %}
-                            <a class="btn btn-rounded btn-secondary btn-sm float-right" href="/customers?page={{ page + 1 }}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">
+                            <a class="btn btn-rounded btn-secondary btn-sm py-1 px-4 float-right" href="/customers?page={{ page + 1 }}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">
                                 Next
                             </a>
                             {% endif %}

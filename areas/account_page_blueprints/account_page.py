@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template,flash,url_for
+from flask import Blueprint, render_template,flash,url_for,jsonify
 from model import Customer,Account,Transaction
 from datetime import datetime
 from flask_security import auth_required,roles_accepted
@@ -10,19 +10,56 @@ accounts_BP = Blueprint('accounts_BP', __name__)
 
 
 
+
+
+
+
+@accounts_BP.route("/api/<id>")
+def more_transactions(id):
+    transaction_list=[]
+    page = int(request.args.get('page',1))
+    current_transactions = Transaction.query.filter_by(AccountId=id)
+    transactions = current_transactions.order_by(Transaction.Id.desc()).paginate(page=page,per_page=10    )
+    for transaction in transactions.items:
+        t = { "Id": transaction.Id,"Type":transaction.Type, "Operation":transaction.Operation, "Date": transaction.Date, "Amount":transaction.Amount,"NewBalance":transaction.NewBalance }
+        transaction_list.append(t)
+    return jsonify(transaction_list)
+
+
+
+
+
+
 @accounts_BP.route("/account/<customer>/<id>")
 @auth_required()
 @roles_accepted("Admin","Cashier")
 def account_page(customer,id):
-    id = int(id)
-    customer = customer
-    account = Account.query.filter_by(Id=id).first()
-    current_transactions = Transaction.query.filter_by(AccountId=id)
-    current_transactions = current_transactions.order_by(Transaction.Id.desc())
+
+    return render_template("account_templates/account.html", id=id,customer=customer)
+
+
+
+
+
+
+
+
+
+
+
+# @accounts_BP.route("/account/<customer>/<id>")
+# @auth_required()
+# @roles_accepted("Admin","Cashier")
+# def account_page(customer,id):
+#     id = int(id)
+#     customer = customer
+#     account = Account.query.filter_by(Id=id).first()
+#     current_transactions = Transaction.query.filter_by(AccountId=id)
+#     current_transactions = current_transactions.order_by(Transaction.Id.desc())
     
     
 
-    return render_template("account_templates/account.html", id=id, customer = customer, account=account, current_transactions=current_transactions)
+#     return render_template("account_templates/account.html", id=id, customer = customer, account=account, current_transactions=current_transactions)
 
 
 
@@ -220,4 +257,4 @@ def external_transfer(account_from):
     return render_template("account_templates/external_transfer.html", account_from = account_from, new_transfer=new_transfer)
 
 
-    
+
