@@ -104,7 +104,7 @@ def deactivate_customer(id):
 
 
 
-@customers_BP.route("/register", methods = ["GET","POST"])
+@customers_BP.route("/register_customer", methods = ["GET","POST"])
 @auth_required()
 @roles_accepted("Admin","Cashier")
 

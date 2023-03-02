@@ -1,0 +1,114 @@
+{% from "_form_helpers.html" import render_field %}
+{% extends "base_template_3.html"%}
+
+
+{% block content %}
+
+
+
+<div class="col-12 stretch-card">
+  <div class="card">
+    <div class="card-body p-3px">
+
+        
+      <div class="p-4">
+      <lable class="display-3">Edit User</lable>
+      
+
+
+      
+      </div>
+
+      <table class="table">
+        <form class="forms-sample" method="post">
+          {{ edit_user.csrf_token }}
+
+
+          <tr>
+            <td>Information:</td>
+            <td></td>
+            <td></td>
+          </tr>
+          {% with messages = get_flashed_messages() %}
+                {%if messages%}
+                {% for message in messages %}
+            
+                <span class="badge pill bg-success p-1">
+                    {{message}}
+                </span>
+
+                
+                {%endfor%}
+                {%endif%}
+                {%endwith%}
+
+          <tr>
+            <td>Users: </td>
+            <td>{{ render_field(edit_user.user_list) }}</td>
+            <td></td>
+          </tr>
+
+
+          <tr>
+            <td>Update Role: </td>
+            <td>{{ render_field(edit_user.user_role) }}</td>
+            <td></td>
+            
+            
+            
+          </tr>
+
+          <tr>
+            <td>Update E-mail: </td>
+            <td>{{ render_field(edit_user.user_email) }}</td>
+            <td></td>
+            
+            
+          </tr>
+
+          <tr>
+            <td>Repeat E-mail:</td>
+            <td>{{ render_field(edit_user.repeat_email) }}</td>
+            <td></td>
+            
+            
+          </tr>
+
+          <tr>
+            <td>Update Password</td>
+            <td>{{ render_field(edit_user.password) }}</td>
+            <td></td>
+            
+            
+          </tr>
+          <tr>
+            <td>Repeat Password</td>
+            <td>{{ render_field(edit_user.repeat_password) }}</td>
+            <td></td>
+            
+            
+          </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="col-lg-12 grid-margin stretch-card">
+    
+  <div class="card align-items-center my-4">
+      
+      <div class="card-body">
+
+          
+          <div class="table-responsive">
+              <button  type ="submit" class="btn btn-rounded btn-success btn-lg" onclick="return confirm('Are you sure?')">Register</button>
+          </div>
+          
+      </div>
+    
+  </div>
+</div>
+
+{% endblock %}
+
+
+

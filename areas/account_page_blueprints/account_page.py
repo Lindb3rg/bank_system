@@ -43,26 +43,6 @@ def account_page(customer,id):
 
 
 
-
-
-
-
-# @accounts_BP.route("/account/<customer>/<id>")
-# @auth_required()
-# @roles_accepted("Admin","Cashier")
-# def account_page(customer,id):
-#     id = int(id)
-#     customer = customer
-#     account = Account.query.filter_by(Id=id).first()
-#     current_transactions = Transaction.query.filter_by(AccountId=id)
-#     current_transactions = current_transactions.order_by(Transaction.Id.desc())
-    
-    
-
-#     return render_template("account_templates/account.html", id=id, customer = customer, account=account, current_transactions=current_transactions)
-
-
-
 @accounts_BP.route("/deposit/<id>", methods = ["GET","POST"])
 
 @auth_required()
@@ -171,7 +151,7 @@ def transfer(customer_id,account_from):
         withdraw.AccountId = account_from
         withdraw.Type = "Credit"
         withdraw.Operation = "Transfer"
-        withdraw.Date = datetime.datetime.now()
+        withdraw.Date = datetime.now()
         withdraw.Amount = new_transfer.amount.data
         new_transfer.amount.data = float(new_transfer.amount.data)
 
@@ -187,7 +167,7 @@ def transfer(customer_id,account_from):
         deposit.AccountId = new_transfer.accounts_to.data
         deposit.Type = "Debit"
         deposit.Operation = "Transfer"
-        deposit.Date = datetime.datetime.now()
+        deposit.Date = datetime.now()
         deposit.Amount = new_transfer.amount.data
         for i in Account.query.filter_by(Id=new_transfer.accounts_to.data):
             deposit.NewBalance = i.Balance + new_transfer.amount.data
@@ -231,7 +211,7 @@ def external_transfer(account_from):
         transaction_from.AccountId = account_from
         transaction_from.Type = "Credit"
         transaction_from.Operation = "Transfer"
-        transaction_from.Date = datetime.datetime.now()
+        transaction_from.Date = datetime.now()
         transaction_from.Amount = new_transfer.amount.data
         new_transfer.amount.data = float(new_transfer.amount.data)
         transaction_from.NewBalance = current_account.Balance - new_transfer.amount.data
@@ -239,7 +219,7 @@ def external_transfer(account_from):
         transaction_to = Transaction()
         transaction_to.AccountId = new_transfer.account_to.data
         transaction_to.Type = "Debit"
-        transaction_to.Date = datetime.datetime.now()
+        transaction_to.Date = datetime.now()
         transaction_to.Operation = "Transfer"
         transaction_to.Amount = new_transfer.amount.data
         new_transfer.amount.data = float(new_transfer.amount.data)
@@ -251,7 +231,7 @@ def external_transfer(account_from):
         db.session.add(transaction_from)
         db.session.add(transaction_to)
         db.session.commit()
-        flash("Withdrawal done!")
+        flash("Transfer done!")
         return redirect("/customer/" + str(customer))
     
     return render_template("account_templates/external_transfer.html", account_from = account_from, new_transfer=new_transfer)

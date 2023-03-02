@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import Form,BooleanField,StringField,validators,ValidationError
-from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField,DecimalField,TelField,DateField
-from model import Account, Customer
+from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField,DecimalField,TelField,DateField,PasswordField
+from wtforms.validators import EqualTo, InputRequired
+from model import Account, Customer,user_datastore
 from datetime import datetime
 
 def validate_national_id(form,field):
@@ -36,6 +37,12 @@ def validate_active_customer(form,field):
         raise ValidationError("Manage not unavailable due to inactive customer")
     if form.is_active.data == False:
         raise ValidationError("Transactions unavailable due to inactive customer")
+
+
+def validate_existing_user(form,field):
+    if user_datastore.find_user(email=form.user_email.data):
+        raise ValidationError("User already existing")
+
 
 
 def check_for_account(form,field):
@@ -147,3 +154,17 @@ class Register_customer_form(FlaskForm):
 
 
 
+class Register_new_user(FlaskForm):
+    user_role = SelectField("User Role", choices=["Cashier","Admin"],validators=[validators.DataRequired(message="*required field*")])
+    user_email = EmailField("User Email",validators=[InputRequired(), EqualTo('repeat_email', message='Emails must match'),validators.Email(),validate_existing_user])
+    repeat_email = EmailField("Repeat Email")
+    password = PasswordField('New Password', [InputRequired(), EqualTo('repeat_password', message='Passwords must match')])
+    repeat_password  = PasswordField('Repeat Password')
+
+class Edit_new_user(FlaskForm):
+    user_list = SelectField("User List", choices=[],validators=[validators.DataRequired(message="*required field*")])
+    user_role = SelectField("User Role", choices=["","Cashier","Admin"])
+    user_email = EmailField("User Email",validators=[EqualTo('repeat_email', message='Emails must match'),validators.Email(),validate_existing_user])
+    repeat_email = EmailField("Repeat Email")
+    password = PasswordField('New Password', [EqualTo('repeat_password', message='Passwords must match')])
+    repeat_password  = PasswordField('Repeat Password')

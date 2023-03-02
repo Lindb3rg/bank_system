@@ -58,6 +58,7 @@
               <span class="menu-title">Start Page</span>
             </a>
           </li>
+          
           <li class="nav-item menu-items">
             <a class="nav-link" href="/customers">
               <span class="menu-icon">
@@ -66,16 +67,22 @@
               <span class="menu-title">Customers</span>
             </a>
           </li>
+
           <li class="nav-item menu-items">
-            <a class="nav-link" href="/register">
+            <a class="nav-link" href="/register_customer">
               <span class="menu-icon">
                 <i class="mdi mdi-account-plus text-success"></i>
               </span>
               <span class="menu-title">Register New</span>
             </a>
           </li>
+
           
-          <!-- {% if current_user.has_role("Admin") %}
+          
+
+
+     
+          {% if current_user.has_role('Admin') %}
           <li class="nav-item menu-items">
             <a class="nav-link collapsed" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
               <span class="menu-icon">
@@ -86,15 +93,15 @@
             </a>
             <div class="collapse" id="auth" style="">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                {% endif %}
+                <li class="nav-item"> <a class="nav-link" href="/register_user"> Create New User </a></li>
+                <li class="nav-item"> <a class="nav-link" href="/edit_user"> Edit User </a></li>
+                
+
                 
               </ul>
             </div>
-          </li> -->
+          </li>
+          {%endif%}
           
 
         </ul>
@@ -109,73 +116,27 @@
             
             <ul class="navbar-nav navbar-nav-right">
             
-             
-              <!-- {% if current_user.has_role("Admin") %}
-              <li class="nav-item dropdown border-left show">
-                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown" aria-expanded="true">
-                  <i class="mdi mdi-bell"></i>
-                  
-                  Om det finns aktiva ärenden  -->
-                  <!-- <span class="count bg-danger"></span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list " aria-labelledby="notificationDropdown">
-                  <h6 class="p-3 mb-0">Notifications</h6>
-                  <div class="dropdown-divider"></div>
-                  
-                  <a class="dropdown-item preview-item" href="/messages">
-                    <div class="preview-thumbnail">
-                      <div class="preview-icon bg-dark rounded-circle">
-                        <i class="mdi mdi-message-alert text-danger"></i>
-                      </div>
-                    </div>
-                    <div class="preview-item-content">
-                      <p class="preview-subject mb-1">New Messages</p>
-                      <p class="text-muted ellipsis mb-0"> New messages pending...</p>
-                    </div>
-                  </a>
-
-                  <div class="dropdown-divider"></div>
-
-                  
-                  <a class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                      <div class="preview-icon bg-dark rounded-circle">
-                        <i class="mdi mdi-settings text-danger"></i>
-                      </div>
-                    </div>
-                    <div class="preview-item-content">
-                      <p class="preview-subject mb-1">Settings</p>
-                      <p class="text-muted ellipsis mb-0"> Update dashboard </p>
-                    </div>
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                      <div class="preview-icon bg-dark rounded-circle">
-                        <i class="mdi mdi-link-variant text-warning"></i>
-                      </div>
-                    </div>
-                    <div class="preview-item-content">
-                      <p class="preview-subject mb-1">Launch Admin</p>
-                      <p class="text-muted ellipsis mb-0"> New admin wow! </p>
-                    </div>
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <p class="p-3 mb-0 text-center">See all notifications</p>
-                </div>
-              </li> -->
-              <!-- {% endif %} -->
 
               {% if current_user.is_authenticated %}
               <li class="nav-item dropdown">
                 <a class="nav-link" id="profileDropdown" href="" data-toggle="dropdown">
                   <div class="navbar-profile">
-                    <h4 class="text-secondary">
                     
-                    <lable class="display-6 text-muted">{{current_user.email}}</lable>
+                      {% if current_user.has_role('Admin') %}
+                      <lable class="display-5 text-warning px-3">Administrator</lable>
+                      {%endif%}
+                      {% if current_user.has_role('Cashier') %}
+                      <lable class="display-5 text-info px-3">Cashier</lable>
+                      {%endif%}
                     
                     
-                    </h4>
+                    
+                    
+                    <lable class="display-5 text-muted">  {{current_user.email}}</lable>
+                    
+                    
+                    
+                    
                     <p class="mb-0 d-none d-sm-block navbar-profile-name">
                     
 
