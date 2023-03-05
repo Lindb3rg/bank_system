@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate, upgrade
 from model import db, seedData
+from flask_security import current_user
 
 
 app = Flask(__name__)
@@ -31,6 +32,7 @@ app.register_blueprint(api_BP)
 if __name__  == "__main__":
     with app.app_context():
         upgrade()
+        
 
 
 

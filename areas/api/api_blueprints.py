@@ -3,7 +3,7 @@ from datetime import datetime
 from flask_security import auth_required,roles_accepted,login_required,current_user, hash_password
 
 from flask import request, redirect
-from model import db,user_datastore,Customer
+from model import db,user_datastore,Customer,Account
 
 
 
@@ -46,10 +46,46 @@ def customer_api(id):
                  "customer_id":account.CustomerId
                  }
             customer_data.append(a)
-
-        
-        
     return jsonify(customer_data)
+
+
+
+
+@api_BP.route("/api/account/<id>", methods=["GET"])
+def transaction_api(id):
+    transaction_data=[]
+    current_account = Account.query.filter_by(Id=id).first()
+    limit = int(request.args.get('limit',""))
+    offset = int(request.args.get('offset',""))
+
+    for index,data in enumerate(current_account.Transactions,1):
+        if index >= offset and index <= limit:
+            t = { "transaction_id": data.Id,
+            "transaction_type":data.Type,
+            "operation":data.Operation,
+            "date": data.Date,
+            "amount":data.Amount,
+            "new_balance":data.NewBalance,
+            "account_id":data.AccountId,
+            }
+            transaction_data.append(t)
+
+
+       
+    return jsonify(transaction_data)
+
+#  Id = db.Column(db.Integer, primary_key=True)
+#     Type = db.Column(db.String(20), unique=False, nullable=False)
+#     Operation = db.Column(db.String(50), unique=False, nullable=False)
+#     Date = db.Column(db.DateTime, unique=False, nullable=False)
+#     Amount = db.Column(db.Float, unique=False, nullable=False)
+#     NewBalance = db.Column(db.Float, unique=False, nullable=False)
+#     AccountId = db.Column(db.Integer, db.ForeignKey('Accounts.Id'), nullable=False)
+
+
+
+
+
 
 #   Id = db.Column(db.Integer, primary_key=True)
 #     AccountType = db.Column(db.String(10), unique=False, nullable=False)

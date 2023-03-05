@@ -3,7 +3,7 @@ from datetime import datetime
 from flask_security import auth_required,roles_accepted,login_required,current_user, hash_password
 from forms import Register_new_user,Edit_new_user
 from flask import request, redirect
-from model import db,user_datastore
+from model import db,user_datastore,User
 
 
 
@@ -51,16 +51,46 @@ def register_user_page():
 @auth_required()
 @roles_accepted("Admin")
 def edit_user_page():
+    # if not current_user.is_authenticated:
+    #     return redirect(url_for('/logout'))
+    
     edit_user = Edit_new_user()
 
-    u = user_datastore.User.query.all()
+    all_users = User.query.all()
    
-    for i in u:
-        edit_user.user_list.choices.append(i)
+    for i in all_users:
+        edit_user.user_list.choices.append(i.email)
     if edit_user.validate_on_submit():
+        # user = User.query.filter_by(email=edit_user.user_list.data).first()
+        user = user_datastore.find_user(email=edit_user.user_list.data)
+        if edit_user.user_role.data == "Admin":
+            
+            role = user_datastore.find_role("Cashier")
+            user.roles.remove(role)
+            role = user_datastore.find_role("Admin")
+            user_datastore.add_role_to_user(user,role)
+
+            
+
+        if edit_user.user_role.data == "Cashier":
+            role = user_datastore.find_role("Admin")
+            user.roles.remove(role)
+            role = user_datastore.find_role("Cashier")
+            user_datastore.add_role_to_user(user,role)
+            
+
+        # if edit_user.user_role == None:
+        #     user.roles_users.role_id = user.roles_users.role_id
+
+        if edit_user.user_email.data:
+            user.email = edit_user.user_email.data
+        
+        if edit_user.password.data:
+            user.password = hash_password(edit_user.password.data)
+
         
         user_datastore.db.session.commit()
-        flash(f"{edit_user.user_role.data} user {edit_user.user_email.data} added to database")
+        flash(f"Changes Saved!")
     return render_template("admin_templates/edit_user.html", edit_user=edit_user)
 
 

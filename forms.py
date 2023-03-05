@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import Form,BooleanField,StringField,validators,ValidationError
 from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField,DecimalField,TelField,DateField,PasswordField
 from wtforms.validators import EqualTo, InputRequired
+from flask_security import current_user
 from model import Account, Customer,user_datastore
 from datetime import datetime
 
@@ -66,6 +67,11 @@ def validate_date(form,field):
     if field.birthdate > datetime.now():
         raise ValidationError("Date not valid after todays date")
 
+def not_current_user(form,field):
+    user = current_user.get_id()
+    print(user.args)
+    # if session(email=form.user_list):
+    #     raise ValidationError("Cannot change role while logged in")
 
 
 
@@ -161,10 +167,11 @@ class Register_new_user(FlaskForm):
     password = PasswordField('New Password', [InputRequired(), EqualTo('repeat_password', message='Passwords must match')])
     repeat_password  = PasswordField('Repeat Password')
 
+
+
 class Edit_new_user(FlaskForm):
+    current_user = StringField()
     user_list = SelectField("User List", choices=[],validators=[validators.DataRequired(message="*required field*")])
-    user_role = SelectField("User Role", choices=["","Cashier","Admin"])
-    user_email = EmailField("User Email",validators=[EqualTo('repeat_email', message='Emails must match'),validators.Email(),validate_existing_user])
-    repeat_email = EmailField("Repeat Email")
-    password = PasswordField('New Password', [EqualTo('repeat_password', message='Passwords must match')])
-    repeat_password  = PasswordField('Repeat Password')
+    user_role = SelectField("User Role", choices=["","Cashier","Admin"], validators=[not_current_user])
+    user_email = EmailField("User Email",validators=[validators.Optional(),validators.Email(),validate_existing_user])
+    password = PasswordField('New Password', validators=[validators.Optional()])
