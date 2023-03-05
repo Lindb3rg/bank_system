@@ -109,19 +109,19 @@ def seedData(app,db):
     app.security.datastore.db.session.commit()
 
     antal =  Customer.query.count()
-    while antal < 100:
+    while antal < 600:
         customer = Customer()
-        
+        # barnum.create_c
         customer.GivenName, customer.Surname = barnum.create_name()
 
         customer.Streetaddress = barnum.create_street()
         customer.Zipcode, customer.City, _  = barnum.create_city_state_zip()
-        customer.Country = barnum.create_c
-        customer.CountryCode = "US"
+        customer.Country = "Finland"
+        customer.CountryCode = "FI"
         customer.Birthday = barnum.create_birthday()
         n = barnum.create_cc_number()
         customer.NationalId = customer.Birthday.strftime("%Y%m%d-") + n[1][0][0:4]
-        customer.TelephoneCountryCode = 55
+        customer.TelephoneCountryCode = 358
         customer.Telephone = barnum.create_phone()
         customer.EmailAddress = barnum.create_email().lower()
 
