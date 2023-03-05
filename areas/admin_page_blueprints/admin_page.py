@@ -3,7 +3,7 @@ from datetime import datetime
 from flask_security import auth_required,roles_accepted,login_required,current_user, hash_password
 from forms import Register_new_user,Edit_new_user
 from flask import request, redirect
-from model import db,user_datastore,User
+from model import db,user_datastore,User,Role
 
 
 
@@ -51,10 +51,10 @@ def register_user_page():
 @auth_required()
 @roles_accepted("Admin")
 def edit_user_page():
-    # if not current_user.is_authenticated:
-    #     return redirect(url_for('/logout'))
-    
+
+    id = request.args.get('id')
     edit_user = Edit_new_user()
+    edit_user.current_user.data = int(id)
 
     all_users = User.query.all()
    
@@ -79,8 +79,7 @@ def edit_user_page():
             user_datastore.add_role_to_user(user,role)
             
 
-        # if edit_user.user_role == None:
-        #     user.roles_users.role_id = user.roles_users.role_id
+     
 
         if edit_user.user_email.data:
             user.email = edit_user.user_email.data
@@ -95,6 +94,42 @@ def edit_user_page():
 
 
 
+
+@admin_BP.route("/users")
+def list_users():
+    current_users = User.query.all()
+    return render_template("admin_templates/users.html",current_users=current_users)
+
+
+
+
+
+@admin_BP.route("/status/<id>", methods=["GET"])
+@auth_required()
+@roles_accepted("Admin")
+def manage_user_status(id):
+    user = user_datastore.find_user(id=id)
+    status = request.args.get('status')
+    
+    if status == "true":
+        user.active = False
+        user_datastore.db.session.commit()
+        
+        
+        return redirect("/users")
+    
+    if status == "false":
+        user.active = True
+        user_datastore.db.session.commit()
+        return redirect("/users")
+    
+    
+
+
+
+
+
+    
 
 
 # @admin_BP.route("/deposit/<id>", methods = ["GET","POST"])

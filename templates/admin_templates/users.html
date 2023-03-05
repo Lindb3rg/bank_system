@@ -1,0 +1,81 @@
+{% extends "base_template_3.html"%}
+
+
+{% block content %}
+
+
+
+<div class="col-12 stretch-card">
+  <div class="card">
+    <div class="card-body">
+
+        
+      <div class="p-4">
+      <lable class="display-3">Users</lable>
+      
+
+
+      
+      </div>
+
+      <table class="table">
+        
+          
+
+
+          <tr>
+            <td>Information:</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+         
+
+          <tr>
+            <td>Id</td>
+            <td>E-mail</td>
+            <td>Status</td>
+            <td class="td-align-right">Change status</td>
+            
+          </tr>
+
+          {%for user in current_users%}
+          <tr>
+            <td>{{user.id}}</td>
+            <td>{{user.email}}</td>
+            <td>
+                {%if user.active == True%}
+                <lable class="text-success">Active</lable>
+                {%elif user.active == False%}
+                <lable class="text-danger">Inactive</lable>
+                {%endif%}
+            </td>
+            <td>
+                {%if user.active == True%}
+                <a href="/status/{{ user.id }}?status=true" class="btn btn-rounded btn-warning btn-sm py-1">Deactivate</a>
+                {%elif user.active == False%}
+                <a href="/status/{{ user.id }}?status=false" class="btn btn-rounded btn-warning btn-sm py-1">Activate</a>
+                {%endif%}
+                
+            </td>
+            
+            
+            
+          </tr>
+          {%endfor%}
+
+      
+       
+          
+    
+      </table>
+
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+

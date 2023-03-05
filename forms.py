@@ -68,10 +68,10 @@ def validate_date(form,field):
         raise ValidationError("Date not valid after todays date")
 
 def not_current_user(form,field):
-    user = current_user.get_id()
-    print(user.args)
-    # if session(email=form.user_list):
-    #     raise ValidationError("Cannot change role while logged in")
+    user = user_datastore.find_user(email=form.user_list.data)
+
+    if form.current_user.data == user.id:
+        raise ValidationError("Cannot change role of currently inlogged user")
 
 
 
@@ -170,8 +170,9 @@ class Register_new_user(FlaskForm):
 
 
 class Edit_new_user(FlaskForm):
-    current_user = StringField()
+    current_user = IntegerField("current user")
     user_list = SelectField("User List", choices=[],validators=[validators.DataRequired(message="*required field*")])
     user_role = SelectField("User Role", choices=["","Cashier","Admin"], validators=[not_current_user])
     user_email = EmailField("User Email",validators=[validators.Optional(),validators.Email(),validate_existing_user])
     password = PasswordField('New Password', validators=[validators.Optional()])
+    

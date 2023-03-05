@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_migrate import Migrate, upgrade
-from model import db, seedData
+from model import db, seedData,User,user_datastore
 from flask_security import current_user
 
 
@@ -26,12 +26,25 @@ app.register_blueprint(report_page)
 app.register_blueprint(admin_BP)
 app.register_blueprint(api_BP)
 
+def activate_user():
+    user = User.query.filter_by(id=12).first()
+    user.active = True
+    user_datastore.db.session.commit()
 
+# def change_status():
+#     user = User.query.filter_by(id=12).first()
+#     role = user_datastore.find_role("Cashier")
+#     user.roles.remove(role)
+#     role = user_datastore.find_role("Admin")
+#     user_datastore.add_role_to_user(user,role)
 
 
 if __name__  == "__main__":
     with app.app_context():
         upgrade()
+        # activate_user()
+        # change_status()
+        
         
 
 
