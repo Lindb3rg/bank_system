@@ -57,10 +57,10 @@ def transaction_api(id):
     current_account = Account.query.filter_by(Id=id).first()
     limit = int(request.args.get('limit',""))
     offset = int(request.args.get('offset',""))
-
-    for index,data in enumerate(current_account.Transactions,1):
-        if index >= offset and index <= limit:
-            t = { "transaction_id": data.Id,
+    
+    sliced_data = current_account.Transactions[offset:limit+offset]
+    for data in sliced_data:
+        t = { "transaction_id": data.Id,
             "transaction_type":data.Type,
             "operation":data.Operation,
             "date": data.Date,
@@ -68,7 +68,19 @@ def transaction_api(id):
             "new_balance":data.NewBalance,
             "account_id":data.AccountId,
             }
-            transaction_data.append(t)
+        transaction_data.append(t)
+
+    # for index,data in enumerate(current_account.Transactions,1):
+    #     if index >= offset and index <= limit:
+    #         t = { "transaction_id": data.Id,
+    #         "transaction_type":data.Type,
+    #         "operation":data.Operation,
+    #         "date": data.Date,
+    #         "amount":data.Amount,
+    #         "new_balance":data.NewBalance,
+    #         "account_id":data.AccountId,
+    #         }
+    #         transaction_data.append(t)
 
 
        

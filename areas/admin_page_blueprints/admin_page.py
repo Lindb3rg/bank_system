@@ -61,7 +61,7 @@ def edit_user_page():
     for i in all_users:
         edit_user.user_list.choices.append(i.email)
     if edit_user.validate_on_submit():
-        # user = User.query.filter_by(email=edit_user.user_list.data).first()
+        
         user = user_datastore.find_user(email=edit_user.user_list.data)
         if edit_user.user_role.data == "Admin":
             
