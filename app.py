@@ -16,12 +16,14 @@ from areas.account_page_blueprints.account_page import accounts_BP
 from areas.customer_page_blueprints.customer_page import customers_BP
 from areas.report_page_blueprints.report_page import report_page
 from areas.admin_page_blueprints.admin_page import admin_BP
+from areas.api.api_blueprints import api_BP
 
 app.register_blueprint(main_page)
 app.register_blueprint(accounts_BP)
 app.register_blueprint(customers_BP)
 app.register_blueprint(report_page)
 app.register_blueprint(admin_BP)
+app.register_blueprint(api_BP)
 
 
 

@@ -53,7 +53,7 @@ Account no: {{id}}
 <script>
     pageNo = 1;
     function fetchMore() {
-        fetch("/api/{{id}}?page=" + pageNo)
+        fetch("/transaction_api/{{id}}?page=" + pageNo)
             .then((response) => response.json())
             .then((json) => {
                     pageNo = pageNo + 1;

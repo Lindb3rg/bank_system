@@ -14,7 +14,7 @@ accounts_BP = Blueprint('accounts_BP', __name__)
 
 
 
-@accounts_BP.route("/api/<id>")
+@accounts_BP.route("/transaction_api/<id>")
 def more_transactions(id):
     transaction_list=[]
     page = int(request.args.get('page',1))
