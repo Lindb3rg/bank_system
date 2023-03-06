@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template,request
+from flask import Blueprint, render_template
 from model import Customer,Account,db
-
 from flask_security import roles_accepted,auth_required,logout_user
 from sqlalchemy import func
 from flask import redirect
@@ -80,26 +79,6 @@ def startpage():
                            NO_count=NO_count,
                            NO_total_accounts = NO_total_accounts,
                            NO_total_balance = NO_total_balance)
-
-
-
-# @main_page.route("/top_10", methods=["GET"])
-# def more_transactions():
-#     transaction_list=[]
-#     country = request.args.get('country')
-#     results = db.session.query(Customer, Account).join(Account).filter(Customer.Country== country).all()
-#     for result in results:
-
-    
-
-    
-
-
-   
-    # for transaction in transactions.items:
-    #     t = { "Id": transaction.Id,"Type":transaction.Type, "Operation":transaction.Operation, "Date": transaction.Date, "Amount":transaction.Amount,"NewBalance":transaction.NewBalance }
-    #     transaction_list.append(t)
-    # return jsonify(transaction_list)
 
 
 

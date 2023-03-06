@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import Form,BooleanField,StringField,validators,ValidationError
 from wtforms.fields import IntegerField, TextAreaField, EmailField, SelectField,DecimalField,TelField,DateField,PasswordField
 from wtforms.validators import EqualTo, InputRequired
-from flask_security import current_user
 from model import Account, Customer,user_datastore
 from datetime import datetime
 

@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template,flash,url_for
-from model import Customer,Account,Transaction
+from flask import Blueprint, render_template,flash
+from model import Customer,Account
 from datetime import datetime
 from flask_security import roles_accepted,auth_required
-from forms import Issue_report_form,Deposition_form, Withdrawal_form, Transfer_form_internal, Transfer_form_external, Edit_customer_form,Register_customer_form
+from forms import Edit_customer_form,Register_customer_form
 from flask import request, redirect
 from model import db
 
