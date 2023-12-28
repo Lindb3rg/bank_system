@@ -1,0 +1,9 @@
+Flask
+Flask-Login
+Flask-Mail
+Flask-Migrate
+Flask-Principal
+Flask-Security-Too
+Flask-SQLAlchemy
+Flask-User
+Flask-WTF
